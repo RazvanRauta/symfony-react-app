@@ -3,7 +3,7 @@
     <option name="SCRIPT_PATH" value="C:\Users\razva\Desktop\symfony-react-app\start-server.sh" />
     <option name="SCRIPT_OPTIONS" value="" />
     <option name="INTERPRETER_PATH" value="" />
-    <option name="INTERPRETER_OPTIONS" value="" />
+    <option name="INTERPRETER_OPTIONS" value="./start-server.sh" />
     <method v="2" />
   </configuration>
 </component>
