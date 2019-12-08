@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProductController extends AbstractController
 {
     /**
-     * @Route("/products/{id}", name="product", methods={"GET"})
+     * @Route("/api/products/{id}", name="product", methods={"GET"})
      * @Template(vars={"product"})
      * @param Product $product
      */

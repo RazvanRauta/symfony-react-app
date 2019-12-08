@@ -14,12 +14,15 @@
   },
   "plugins": [
     "react",
-    "jsx-a11y"
+    "jsx-a11y",
+    "prettier"
   ],
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:jsx-a11y/recommended"
+    "plugin:jsx-a11y/recommended",
+    "plugin:prettier/recommended",
+    "prettier/react"
   ],
   "rules": {
     "react/jsx-uses-react": 2,
@@ -31,7 +34,17 @@
     "react/no-typos": 2,
     "react/no-unescaped-entities": 2,
     "react/prop-types": 0,
-    "react/react-in-jsx-scope": 2
+    "react/react-in-jsx-scope": 2,
+    "jsx-a11y/click-events-have-key-events": 0,
+    "jsx-a11y/no-static-element-interactions": 0,
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": true,
+        "useTabs": true,
+        "parser": "flow"
+      }
+    ]
   },
   "settings": {
     "react": {
