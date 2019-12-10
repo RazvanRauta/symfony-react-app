@@ -10,7 +10,7 @@ const HatsPage = () => (
 	</div>
 );
 
-class App extends Component {
+class MainApp extends Component {
 	constructor(props) {
 		super(props);
 	}
@@ -28,4 +28,4 @@ class App extends Component {
 	}
 }
 
-export default App;
+export default MainApp;

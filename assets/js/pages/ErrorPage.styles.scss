@@ -8,6 +8,7 @@
   height: 100%;
   width: 100%;
   display: flex;
+  flex-flow: column nowrap;
   justify-content: center; /* align horizontal */
   align-items: center; /* align vertical */
 
@@ -20,6 +21,13 @@
       color: red;
       font-family: monospace;
     }
+  }
+
+  .link {
+     a {
+       text-decoration: underline;
+       color: red;
+     }
   }
 
 }
