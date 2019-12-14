@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
 import './App.scss';
-import HomePage from './pages/HomePage';
+import HomePage from './pages/homePage/HomePage';
 import { Route, Switch } from 'react-router-dom';
-import ErrorPage from './pages/ErrorPage';
-
-const HatsPage = () => (
-	<div>
-		<h1>Hats Page</h1>
-	</div>
-);
+import ErrorPage from './pages/errorPage/ErrorPage';
+import ShopPage from './pages/shopPage/ShopPage';
 
 class MainApp extends Component {
 	constructor(props) {
@@ -20,7 +15,7 @@ class MainApp extends Component {
 			<div id="main-container">
 				<Switch>
 					<Route exact path="/" component={HomePage} />
-					<Route path="/shop/hats" component={HatsPage} />
+					<Route path="/shop" component={ShopPage} />
 					<Route component={ErrorPage} />
 				</Switch>
 			</div>

@@ -1,0 +1,40 @@
+/**
+ * @author Razvan Rauta
+ * 08.12.2019
+ * 21:13
+ */
+
+.errorContainer {
+  height: 90%;
+  width: 90%;
+  margin: auto;
+  position: absolute;
+  display: flex;
+  flex-flow: column;
+  justify-content: center; /* align horizontal */
+  align-items: center; /* align vertical */
+
+  .errorImage{
+  }
+
+  .errorMsg {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+    z-index: 10;
+
+    code {
+      color: red;
+      font-family: monospace;
+    }
+  }
+
+  .link {
+    z-index: 10;
+     a {
+       text-decoration: underline;
+       color: red;
+     }
+  }
+
+}

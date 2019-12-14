@@ -1,0 +1,21 @@
+/**
+ * @author Razvan Rauta
+ * 14.12.2019
+ * 17:32
+ */
+
+.collectionPreview {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30px;
+
+  .title {
+    font-size: 28px;
+    margin-bottom: 25px;
+  }
+
+  .preview {
+    display: flex;
+    justify-content: space-between;
+  }
+}

@@ -90,8 +90,8 @@ class ProductFixture extends Fixture
                 [
                     'id' => 10,
                     'name' => 'Adidas NMD',
-                    // 'imageUrl'=> 'https=>//i.ibb.co/0s3pdnc/ad'id'as-nmd.png',
-                    'imageUrl' => "/images/shop-img/sneakers/ad'id'as-nmd.png",
+                    // 'imageUrl'=> 'https=>//i.ibb.co/0s3pdnc/adidas-nmd.png',
+                    'imageUrl' => "/images/shop-img/sneakers/adidas-nmd.png",
                     'price' => 220
                 ],
                 [

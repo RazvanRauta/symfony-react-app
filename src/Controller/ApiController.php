@@ -28,8 +28,10 @@ class ApiController extends AbstractController
             'circular_reference_handler' => function ($object) {
                 return $object->getId();
             }]);
+        $response =  new JsonResponse($jsonObject);
 
+        $response->headers->set('access-control-allow-origin','http://localhost:9000');
 
-        return new JsonResponse($jsonObject);
+        return $response;
     }
 }
