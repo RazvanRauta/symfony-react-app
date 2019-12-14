@@ -1,16 +1,21 @@
 {
   "root": true,
+  "parser": "babel-eslint",
   "parserOptions": {
     "ecmaVersion": 10,
     "sourceType": "module",
-    "parser": "babel-eslint",
     "ecmaFeatures": {
-      "jsx": true
+      "jsx": true,
+      "modules": true,
+      "experimentalObjectRestSpread": true
     }
+
   },
   "env": {
     "browser": true,
-    "es6": true
+    "es6": true,
+    "commonjs": true,
+    "node": true
   },
   "plugins": [
     "react",
@@ -25,18 +30,10 @@
     "prettier/react"
   ],
   "rules": {
-    "react/jsx-uses-react": 2,
-    "react/jsx-uses-vars": 2,
-    "react/no-did-mount-set-state": 2,
-    "react/no-did-update-set-state": 2,
-    "react/no-deprecated": 2,
-    "react/no-direct-mutation-state": 2,
-    "react/no-typos": 2,
-    "react/no-unescaped-entities": 2,
     "react/prop-types": 0,
-    "react/react-in-jsx-scope": 2,
     "jsx-a11y/click-events-have-key-events": 0,
     "jsx-a11y/no-static-element-interactions": 0,
+   "jsx-a11y/label-has-associated-control" : 0,
     "prettier/prettier": [
       "error",
       {
