@@ -8,7 +8,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import styles from './ShopPage.scss?module';
 import CollectionPreview from '../../components/collection-preview/CollectionPreview';
-import Spinner from '../../components/Spinner/Spinner';
+import Spinner from '../../components/spinner/Spinner';
 
 class ShopPage extends Component {
 	constructor(props) {

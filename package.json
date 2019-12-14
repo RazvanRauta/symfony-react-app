@@ -2,6 +2,7 @@
     "devDependencies": {
         "@babel/core": "^7.0.0-0",
         "@babel/plugin-proposal-class-properties": "^7.7.4",
+        "@babel/plugin-transform-react-inline-elements": "^7.7.4",
         "@babel/plugin-transform-runtime": "^7.7.5",
         "@babel/preset-env": "^7.7.4",
         "@babel/preset-react": "^7.7.4",
@@ -10,6 +11,7 @@
         "autoprefixer": "^9.7.3",
         "axios": "^0.19.0",
         "babel-eslint": "^10.0.3",
+        "babel-plugin-inline-react-svg": "^1.1.0",
         "core-js": "^3.0.0",
         "css-loader": "^2.1.1",
         "eslint": "^6.7.2",
@@ -23,7 +25,10 @@
         "node-sass": "^4.13.0",
         "postcss-loader": "^3.0.0",
         "prettier": "^1.19.1",
+        "prop-types": "^15.7.2",
+        "react": "^16.12.0",
         "react-dev-utils": "^9.0.2",
+        "react-dom": "^16.12.0",
         "react-router-dom": "^5.0.1",
         "regenerator-runtime": "^0.13.2",
         "resolve": "1.12.0",
@@ -36,16 +41,14 @@
     },
     "license": "UNLICENSED",
     "private": true,
+    "browserslist": [
+        "defaults"
+    ],
     "scripts": {
         "dev-server": "encore dev-server  --port 3000 --disable-host-check --hot",
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production --progress",
         "csfix": "eslint assets/js --ext .js,.jsx, --fix"
-    },
-    "dependencies": {
-        "prop-types": "^15.7.2",
-        "react": "^16.12.0",
-        "react-dom": "^16.12.0"
     }
 }
