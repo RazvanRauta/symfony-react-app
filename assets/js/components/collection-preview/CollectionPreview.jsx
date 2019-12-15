@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import styles from './CollectionPreview.scss?module';
+import styles from './CollectionPreview.scss';
 import CollectionItem from '../collection-item/CollectionItem';
 
 const CollectionPreview = ({ title, products }) => (

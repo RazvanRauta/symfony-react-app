@@ -3,7 +3,7 @@
  * Date: 14.12.2019
  * Time: 18:49
  */
-import styles from './CollectionItem.scss?module';
+import styles from './CollectionItem.scss';
 
 import React from 'react';
 

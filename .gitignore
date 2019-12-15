@@ -25,3 +25,9 @@ yarn-error.log
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
+/src/Migrations/*
+.idea/jsLinters/
+config/secrets/dev/
+config/secrets/local/
+docker/mysql/data/#innodb_temp/
+docker/mysql/data/binlog.000005

@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import styles from './HomePage.styles.scss?module';
+import styles from './HomePage.styles.scss';
 import Directory from '../../components/directory/Directory';
 
 const HomPage = () => (

@@ -5,8 +5,8 @@
  */
 
 import React from 'react';
-import styles from './ErrorPage.styles.scss?module';
-import { Link, withRouter } from 'react-router-dom';
+import styles from './ErrorPage.styles.scss';
+import {Link, withRouter} from 'react-router-dom';
 import errorImage from '../../../images/x.png';
 
 const ErrorPage = ({ location }) => (

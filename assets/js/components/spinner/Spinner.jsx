@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import styles from './Spinner.scss?module';
+import styles from './Spinner.scss';
 
 const Spinner = () => (
 	<div className={styles.spinnerContainer}>

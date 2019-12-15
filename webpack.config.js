@@ -51,6 +51,10 @@ Encore
 
   // enables Sass/SCSS support
   .enableSassLoader()
+  .configureCssLoader(options => {
+    options.modules = true;
+    options.camelCase = true;
+  })
   .enablePostCssLoader()
   .addLoader({
     enforce: "pre",

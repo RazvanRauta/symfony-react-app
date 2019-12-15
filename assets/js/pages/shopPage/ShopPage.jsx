@@ -4,13 +4,19 @@
  * Time: 15:22
  */
 
-import React, { Component } from 'react';
+import React, {Component} from 'react';
+import {withRouter} from 'react-router-dom';
 import axios from 'axios';
-import styles from './ShopPage.scss?module';
+import styles from './ShopPage.scss';
 import CollectionPreview from '../../components/collection-preview/CollectionPreview';
 import Spinner from '../../components/spinner/Spinner';
+import {instanceOf} from 'prop-types';
+import {Cookies, withCookies} from 'react-cookie';
 
 class ShopPage extends Component {
+	static propTypes = {
+		cookies: instanceOf(Cookies).isRequired
+	};
 	constructor(props) {
 		super(props);
 
@@ -20,10 +26,23 @@ class ShopPage extends Component {
 	}
 
 	componentDidMount() {
-		axios
-			.get('/api/products')
-			.then(response => this.setState({ collections: response.data }))
-			.catch(error => console.log(error));
+		const {cookies} = this.props;
+		const token = cookies.get('token');
+		if (typeof token !== 'undefined' && token.length) {
+			axios
+				.get('/api/products', {
+					headers: {
+						Authorization: 'bearer ' + token
+					}
+				})
+				.then(response => this.setState({collections: response.data}))
+				.catch(error => {
+					this.props.history.push('/signIn');
+					console.log(error);
+				});
+		} else {
+			this.props.history.push('/signIn');
+		}
 	}
 
 	render() {
@@ -40,4 +59,4 @@ class ShopPage extends Component {
 	}
 }
 
-export default ShopPage;
+export default withCookies(withRouter(ShopPage));
