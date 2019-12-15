@@ -12,6 +12,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use DateTime;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -68,12 +69,46 @@ class AuthController extends AbstractController
             $userInfo = [
                 'email' => $user->getEmail(),
                 'firstName' => $user->getFirstName(),
-                'lastName' => $user->getLastName()
+                'lastName' => $user->getLastName(),
+                'imageUrl' => $user->getImageUrl()
             ];
             return new JsonResponse($userInfo);
         }
 
         return new JsonResponse(['No user was found!']);
+    }
+
+    /**
+     * @Route("/api/getToken",name="get_token", methods={"POST"})
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function getTokenUser(JWTTokenManagerInterface $JWTManager, Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['email' => $data['email']]);
+        if (!$user) {
+            $timestamp = random_int(1, 2147385600);
+            $dt = new DateTime();
+            $dt->setTimestamp($timestamp);
+
+            $newUserData = [
+                'email' => $data['email'],
+                'password' => 'password',
+                'firstName' => $data['firstName'],
+                'lastName' => $data['lastName'],
+                'imageUrl' => $data['imageUrl'] ? $data['imageUrl'] : '/images/default/default.png',
+                'dateOfBirth' => $dt
+            ];
+
+            $user = $this->userRepository->createNewUser($newUserData);
+
+            return new JsonResponse(['token' => $JWTManager->create($user)]);
+
+
+        }
+
+        return new JsonResponse(['token' => $JWTManager->create($user)]);
     }
 
 }

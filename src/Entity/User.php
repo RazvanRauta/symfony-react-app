@@ -54,6 +54,11 @@ class User implements UserInterface
      */
     private $dateOfBirth;
 
+    /**
+     * @ORM\Column(type="text", length=2550, nullable=true)
+     */
+    private $imageUrl;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -164,6 +169,18 @@ class User implements UserInterface
     public function setDateOfBirth(?\DateTimeInterface $dateOfBirth): self
     {
         $this->dateOfBirth = $dateOfBirth;
+
+        return $this;
+    }
+
+    public function getImageUrl(): ?string
+    {
+        return $this->imageUrl;
+    }
+
+    public function setImageUrl(?string $imageUrl): self
+    {
+        $this->imageUrl = $imageUrl;
 
         return $this;
     }
