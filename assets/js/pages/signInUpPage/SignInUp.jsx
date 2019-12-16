@@ -9,9 +9,9 @@ import styles from './SignInUp.scss';
 import SignIn from '../../components/sign-in/SignIn';
 
 const SignInUp = () => (
-    <div className={styles.signInOut}>
-        <SignIn/>
-    </div>
+	<div className={styles.signInOut}>
+		<SignIn />
+	</div>
 );
 
 export default SignInUp;

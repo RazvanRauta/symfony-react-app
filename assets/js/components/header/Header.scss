@@ -37,7 +37,19 @@
       .userInfo {
         display: flex;
         flex-flow: column;
-        justify-content: space-between;
+        justify-content: center;
+        margin-left: 10px;
+        span, a {
+          font-size: 14px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        a:hover{
+          color: #22a2de;
+        }
+
       }
 
       .profilePicture {

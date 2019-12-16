@@ -3,7 +3,6 @@
     "@babel/plugin-transform-runtime",
     "@babel/plugin-proposal-class-properties",
     "@babel/plugin-transform-arrow-functions",
-    "@babel/plugin-transform-react-inline-elements",
     [
       "inline-react-svg",
       {
@@ -37,5 +36,10 @@
       }
     ],
       "@babel/preset-react"
-  ]
+  ],
+  "env": {
+    "production": {
+      "presets": ["react-optimize"]
+    }
+  }
 }

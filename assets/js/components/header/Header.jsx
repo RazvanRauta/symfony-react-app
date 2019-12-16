@@ -8,11 +8,14 @@ import React from 'react';
 import styles from './Header.scss';
 import {Link} from 'react-router-dom';
 import Logo from '../../../images/crown.svg';
+import {googleClient} from '../../constants';
+import {GoogleLogout} from 'react-google-login';
+import ProfileSpinner from '../profile-spinner/ProfileSpinner';
 
-const Header = ({email, lastName, firstName, imageUrl}) => (
+const Header = ({ email, lastName, firstName, imageUrl, logout, loading }) => (
 	<div className={styles.header}>
 		<Link className={styles.logoContainer} to="/">
-			<Logo className={styles.logo} title="Home"/>
+			<Logo className={styles.logo} title="Home" />
 		</Link>
 		<div className={styles.options}>
 			<Link className={styles.option} to="/shop">
@@ -21,17 +24,36 @@ const Header = ({email, lastName, firstName, imageUrl}) => (
 			<Link className={styles.option} to="/shop">
 				CONTACT
 			</Link>
-			{email ? (
+			{email && !loading ? (
 				<div className={styles.userProfile}>
-					<div className={styles.userInfo}>
+					<div key={'profilePicture_div'} className={styles.profilePicture}>
+						<img src={imageUrl} alt="user profile" />
+					</div>
+					<div key={'userInfo_div'} className={styles.userInfo}>
 						<span className={styles.name}>{firstName}</span>
 						<span className={styles.name}>{lastName}</span>
-					</div>
-					<div className={styles.profilePicture}>
-						<img src={imageUrl} alt="user profile"/>
+						<GoogleLogout
+							clientId={googleClient}
+							onLogoutSuccess={logout}
+							render={renderProps => (
+								<Link
+									to={'/'}
+									onClick={renderProps.onClick}
+									disabled={renderProps.disabled}
+								>
+									SIGN OUT
+								</Link>
+							)}
+						/>
 					</div>
 				</div>
-			) : null}
+			) : loading ? (
+				<ProfileSpinner />
+			) : (
+				<Link className={styles.option} to={'/signIn'}>
+					SIGN IN
+				</Link>
+			)}
 		</div>
 	</div>
 );
