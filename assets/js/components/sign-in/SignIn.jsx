@@ -4,16 +4,16 @@
  * Time: 23:00
  */
 
-import React, {Component} from 'react';
-import {withRouter} from 'react-router-dom';
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import styles from './SignIn.scss';
 import FormInput from '../form-input/FormInput';
 import CustomButton from '../custom-button/CustomButton';
-import {GoogleLogin} from 'react-google-login';
-import {instanceOf} from 'prop-types';
-import {Cookies, withCookies} from 'react-cookie';
-import {googleClient} from '../../constants';
+import { GoogleLogin } from 'react-google-login';
+import { instanceOf } from 'prop-types';
+import { Cookies, withCookies } from 'react-cookie';
+import { googleClient } from '../../constants';
 
 class SignIn extends Component {
 	static propTypes = {
@@ -29,7 +29,7 @@ class SignIn extends Component {
 		};
 	}
 
-	handleSubmit = event => {
+	handleSubmit = async event => {
 		event.preventDefault();
 		const { cookies } = this.props;
 		axios
@@ -49,7 +49,7 @@ class SignIn extends Component {
 					this.props.history.push('/shop');
 				}
 			})
-			.catch(error => console.log(error));
+			.catch(error => console.error(error));
 	};
 
 	handleChange = event => {
@@ -57,7 +57,12 @@ class SignIn extends Component {
 		this.setState({ [name]: value });
 	};
 
-	handleLoginFromGoogle = ({ email, givenName, familyName, imageUrl }) => {
+	handleLoginFromGoogle = async ({
+		email,
+		givenName,
+		familyName,
+		imageUrl
+	}) => {
 		const { cookies } = this.props;
 		axios
 			.post('/api/getToken', {
@@ -78,13 +83,15 @@ class SignIn extends Component {
 					this.props.history.push('/shop');
 				}
 			})
-			.catch(error => console.log(error));
+			.catch(error => console.error(error));
 	};
 
 	responseGoogle = response => {
 		if (typeof response !== 'undefined' && response.profileObj) {
 			const userObject = response.profileObj;
-			this.handleLoginFromGoogle(userObject);
+			this.handleLoginFromGoogle(userObject).catch(error =>
+				console.error(error)
+			);
 		}
 	};
 
@@ -110,21 +117,24 @@ class SignIn extends Component {
 						required
 						label={'Password'}
 					/>
-					<CustomButton type={'submit'}>Sign In</CustomButton>
-					<GoogleLogin
-						clientId={googleClient}
-						render={renderProps => (
-							<CustomButton
-								onClick={renderProps.onClick}
-								disabled={renderProps.disabled}
-							>
-								Google Sign In
-							</CustomButton>
-						)}
-						onSuccess={this.responseGoogle}
-						onFailure={this.responseGoogle}
-						cookiePolicy={'single_host_origin'}
-					/>
+					<div className={styles.buttons}>
+						<CustomButton type={'submit'}>Sign In</CustomButton>
+						<GoogleLogin
+							clientId={googleClient}
+							render={renderProps => (
+								<CustomButton
+									isGoogleSigIn
+									onClick={renderProps.onClick}
+									disabled={renderProps.disabled}
+								>
+									Google Sign In
+								</CustomButton>
+							)}
+							onSuccess={this.responseGoogle}
+							onFailure={this.responseGoogle}
+							cookiePolicy={'single_host_origin'}
+						/>
+					</div>
 				</form>
 			</div>
 		);

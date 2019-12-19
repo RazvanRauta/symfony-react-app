@@ -7,10 +7,12 @@
 import React from 'react';
 import styles from './SignInUp.scss';
 import SignIn from '../../components/sign-in/SignIn';
+import SignUp from '../../components/sign-up/SignUp';
 
-const SignInUp = () => (
+const SignInUp = props => (
 	<div className={styles.signInOut}>
-		<SignIn />
+		<SignIn {...props} />
+		<SignUp {...props} />
 	</div>
 );
 

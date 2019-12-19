@@ -4,7 +4,7 @@
  * Time: 12:57
  */
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import styles from './Directory.scss';
 import MenuItem from '../menuItem/MenuItem';
 

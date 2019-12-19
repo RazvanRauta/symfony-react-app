@@ -31,3 +31,4 @@ config/secrets/dev/
 config/secrets/local/
 docker/mysql/data/#innodb_temp/
 docker/mysql/data/binlog.000005
+/public/images/avatars/

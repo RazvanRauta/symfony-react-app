@@ -26,10 +26,10 @@ class MainApp extends Component {
 	}
 
 	componentDidMount() {
-		this.handleLogIn();
+		this.handleLogIn().catch(error => console.log(error));
 	}
 
-	handleLogIn = () => {
+	handleLogIn = async () => {
 		const { cookies } = this.props;
 		const token = cookies.get('token');
 		if (typeof token !== 'undefined' && token.length && !this.state.email) {

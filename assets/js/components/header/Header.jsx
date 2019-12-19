@@ -6,10 +6,10 @@
 
 import React from 'react';
 import styles from './Header.scss';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Logo from '../../../images/crown.svg';
-import {googleClient} from '../../constants';
-import {GoogleLogout} from 'react-google-login';
+import { googleClient } from '../../constants';
+import { GoogleLogout } from 'react-google-login';
 import ProfileSpinner from '../profile-spinner/ProfileSpinner';
 
 const Header = ({ email, lastName, firstName, imageUrl, logout, loading }) => (
@@ -35,12 +35,8 @@ const Header = ({ email, lastName, firstName, imageUrl, logout, loading }) => (
 						<GoogleLogout
 							clientId={googleClient}
 							onLogoutSuccess={logout}
-							render={renderProps => (
-								<Link
-									to={'/'}
-									onClick={renderProps.onClick}
-									disabled={renderProps.disabled}
-								>
+							render={() => (
+								<Link to={'/'} onClick={logout}>
 									SIGN OUT
 								</Link>
 							)}
