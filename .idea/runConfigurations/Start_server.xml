@@ -1,9 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Start server" type="ShConfigurationType" singleton="false">
-    <option name="SCRIPT_PATH" value="C:\Users\razva\Desktop\symfony-react-app\start-server.sh" />
-    <option name="SCRIPT_OPTIONS" value="" />
-    <option name="INTERPRETER_PATH" value="" />
-    <option name="INTERPRETER_OPTIONS" value="" />
-    <method v="2" />
-  </configuration>
-</component>

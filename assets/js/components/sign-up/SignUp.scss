@@ -1,0 +1,15 @@
+/**
+ * @author Razvan Rauta
+ * 19.12.2019
+ * 19:36
+ */
+
+.signUp {
+  display: flex;
+  flex-flow: column;
+  width: 380px;
+
+  .title {
+    margin: 10px 0;
+  }
+}

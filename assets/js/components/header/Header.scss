@@ -1,0 +1,65 @@
+/**
+ * @author Razvan Rauta
+ * 14.12.2019
+ * 20:20
+ */
+
+.header {
+  height: 70px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+
+  .logoContainer {
+    height: 100%;
+    width: 70px;
+    padding: 25px;
+  }
+
+  .options {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .option {
+      padding: 10px 15px;
+    }
+
+    .userProfile {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 10px 15px;
+      justify-content: space-between;
+
+      .userInfo {
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        margin-left: 10px;
+        span, a {
+          font-size: 14px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        a:hover{
+          color: #22a2de;
+        }
+
+      }
+
+      .profilePicture {
+        img {
+          display: block;
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+}
