@@ -12,47 +12,68 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use DateTime;
+use Exception;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AuthController extends AbstractController
 {
 
-    /** @var UserRepository $userRepository */
+    /** UserRepository $userRepository */
     private $userRepository;
 
+    /** KernelInterface $appKernel */
+    private $appKernel;
+
+
     /**
-     * AuthController Constructor
-     *
+     * AuthController constructor.
      * @param UserRepository $userRepository
+     * @param KernelInterface $appKernel
      */
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository, KernelInterface $appKernel)
     {
         $this->userRepository = $userRepository;
+        $this->appKernel = $appKernel;
     }
 
     /**
      * @Route("/api/register",name="register", methods={"POST"})
      * @param Request $request
-     * @return Response
+     * @return JsonResponse
+     * @throws Exception
      */
-    public function register(Request $request)
+    public function register(
+        JWTTokenManagerInterface $JWTManager, Request $request)
     {
-        $newUserData = [
-            'email' => $request->get('email'),
-            'password' => $request->get('password'),
-            'firstName' => $request->get('firstName'),
-            'lastName' => $request->get('lastName'),
-            'dateOfBirth' => DateTime::createFromFormat('d-m-Y', $request->get('dateOfBirth'))
-        ];
+        $data = json_decode($request->getContent(), true);
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['email' => $data['email']]);
+        if (!$user) {
 
-        $user = $this->userRepository->createNewUser($newUserData);
+            $bd = $data['dateOfBirth'];
 
-        return new Response(sprintf('User %s was successfully created', $user->getUsername()));
+            $bt = date_create_from_format('Y-m-d', $bd);
+
+            $newUserData = array(
+                'email' => $data['email'],
+                'password' => $data['password'],
+                'firstName' => $data['firstName'],
+                'lastName' => $data['lastName'],
+                'imageUrl' => $this->savePicture($data['picture'], $data['email']),
+                'dateOfBirth' => $data['dateOfBirth'] ? $bt : new DateTime('now')
+            );
+
+            $user = $this->userRepository->createNewUser($newUserData);
+            return new JsonResponse(['message' => sprintf('User %s was successfully created', $user->getUsername()),
+                'token' => $JWTManager->create($user)]);
+
+        }
+        return new JsonResponse(['message' => sprintf('User %s is already registered', $user->getUsername())], 409);
     }
 
     /**
@@ -81,7 +102,7 @@ class AuthController extends AbstractController
     /**
      * @Route("/api/getToken",name="get_token", methods={"POST"})
      * @return JsonResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function getTokenUser(JWTTokenManagerInterface $JWTManager, Request $request)
     {
@@ -109,6 +130,35 @@ class AuthController extends AbstractController
         }
 
         return new JsonResponse(['token' => $JWTManager->create($user)]);
+    }
+
+    /**
+     * @param $picture
+     * @param $email
+     * @return string
+     */
+    private function savePicture($picture, $email)
+    {
+        $projectRoot = $this->appKernel->getProjectDir() . '\\public\\images\\avatars\\';
+        $pictureDecoded = base64_decode(explode(',', $picture)[1]);
+        $extension = explode('/', explode(';', explode(',', $picture)[0])[0])[1];
+        $pictureLocation = $projectRoot . 'avatar.' . $email . '.' . $extension;
+        $pictureUrl = '/images/avatars/' . 'avatar.' . $email . '.' . $extension;
+
+
+        if (!is_dir($projectRoot)) {
+
+            if (!mkdir($projectRoot) && !is_dir($projectRoot)) {
+                throw new RuntimeException(sprintf('Directory "%s" was not created', $projectRoot));
+            }
+        }
+
+        if (file_put_contents($pictureLocation, $pictureDecoded)) {
+            return $pictureUrl;
+        }
+
+        return '/images/default/default.png';
+
     }
 
 }
