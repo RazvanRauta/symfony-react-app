@@ -12,8 +12,10 @@ import Logo from '../../../images/crown.svg';
 import { googleClient } from '../../constants';
 import { GoogleLogout } from 'react-google-login';
 import ProfileSpinner from '../profile-spinner/ProfileSpinner';
+import CartIcon from '../cart-icon/CartIcon';
+import CartDropdown from '../cart-dropdown/CartDropdown';
 
-const Header = ({ logout, loading, currentUser }) => (
+const Header = ({ logout, loading, currentUser, hidden }) => (
 	<div className={styles.header}>
 		<Link className={styles.logoContainer} to="/">
 			<Logo className={styles.logo} title="Home" />
@@ -25,6 +27,7 @@ const Header = ({ logout, loading, currentUser }) => (
 			<Link className={styles.option} to="/shop">
 				CONTACT
 			</Link>
+			{currentUser ? <CartIcon /> : null}
 			{currentUser && currentUser.email && !loading ? (
 				<div className={styles.userProfile}>
 					<div key={'profilePicture_div'} className={styles.profilePicture}>
@@ -52,10 +55,12 @@ const Header = ({ logout, loading, currentUser }) => (
 				</Link>
 			)}
 		</div>
+		{hidden ? null : <CartDropdown />}
 	</div>
 );
 
-const mapStateToProps = state => ({
-	currentUser: state.user.currentUser
+const mapStateToProps = ({ user: { currentUser }, cart: { hidden } }) => ({
+	currentUser,
+	hidden
 });
 export default connect(mapStateToProps)(Header);
