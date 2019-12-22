@@ -7,12 +7,13 @@
 import React from 'react';
 import styles from './Header.scss';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import Logo from '../../../images/crown.svg';
 import { googleClient } from '../../constants';
 import { GoogleLogout } from 'react-google-login';
 import ProfileSpinner from '../profile-spinner/ProfileSpinner';
 
-const Header = ({ email, lastName, firstName, imageUrl, logout, loading }) => (
+const Header = ({ logout, loading, currentUser }) => (
 	<div className={styles.header}>
 		<Link className={styles.logoContainer} to="/">
 			<Logo className={styles.logo} title="Home" />
@@ -24,14 +25,14 @@ const Header = ({ email, lastName, firstName, imageUrl, logout, loading }) => (
 			<Link className={styles.option} to="/shop">
 				CONTACT
 			</Link>
-			{email && !loading ? (
+			{currentUser && currentUser.email && !loading ? (
 				<div className={styles.userProfile}>
 					<div key={'profilePicture_div'} className={styles.profilePicture}>
-						<img src={imageUrl} alt="user profile" />
+						<img src={currentUser.imageUrl} alt="user profile" />
 					</div>
 					<div key={'userInfo_div'} className={styles.userInfo}>
-						<span className={styles.name}>{firstName}</span>
-						<span className={styles.name}>{lastName}</span>
+						<span className={styles.name}>{currentUser.firstName}</span>
+						<span className={styles.name}>{currentUser.lastName}</span>
 						<GoogleLogout
 							clientId={googleClient}
 							onLogoutSuccess={logout}
@@ -54,4 +55,7 @@ const Header = ({ email, lastName, firstName, imageUrl, logout, loading }) => (
 	</div>
 );
 
-export default Header;
+const mapStateToProps = state => ({
+	currentUser: state.user.currentUser
+});
+export default connect(mapStateToProps)(Header);

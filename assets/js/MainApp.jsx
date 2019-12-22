@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.scss';
 import HomePage from './pages/homePage/HomePage';
 import { Route, Switch, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import ErrorPage from './pages/errorPage/ErrorPage';
 import ShopPage from './pages/shopPage/ShopPage';
 import Header from './components/header/Header';
@@ -9,18 +10,16 @@ import SignInUp from './pages/signInUpPage/SignInUp';
 import { instanceOf } from 'prop-types';
 import { Cookies, withCookies } from 'react-cookie';
 import axios from 'axios';
+import { setCurrentUser } from './redux/user/user.actions';
 
 class MainApp extends Component {
 	static propTypes = {
 		cookies: instanceOf(Cookies).isRequired
 	};
+
 	constructor(props) {
 		super(props);
 		this.state = {
-			email: null,
-			firstName: null,
-			lastName: null,
-			imageUrl: null,
 			loading: false
 		};
 	}
@@ -30,7 +29,7 @@ class MainApp extends Component {
 	}
 
 	handleLogIn = async () => {
-		const { cookies } = this.props;
+		const { cookies, setCurrentUser } = this.props;
 		const token = cookies.get('token');
 		if (typeof token !== 'undefined' && token.length && !this.state.email) {
 			this.setState({ loading: true });
@@ -42,9 +41,8 @@ class MainApp extends Component {
 				})
 				.then(response => {
 					if (response && response.data) {
-						this.setState({ ...response.data }, () =>
-							this.setState({ loading: false })
-						);
+						setCurrentUser({ ...response.data });
+						this.setState({ loading: false });
 					}
 				})
 				.catch(error => {
@@ -55,21 +53,18 @@ class MainApp extends Component {
 	};
 
 	handleLogOut = () => {
-		const { cookies } = this.props;
+		const { cookies, setCurrentUser } = this.props;
 		cookies.remove('token');
 		this.setState({
-			email: null,
-			firstName: null,
-			lastName: null,
-			imageUrl: null,
 			loading: false
 		});
+		setCurrentUser(null);
 	};
 
 	render() {
 		return (
 			<div id="main-container">
-				<Header logout={this.handleLogOut} {...this.state} />
+				<Header logout={this.handleLogOut} loading={this.state.loading} />
 				<Switch>
 					<Route exact path="/" component={HomePage} />
 					<Route
@@ -87,4 +82,11 @@ class MainApp extends Component {
 	}
 }
 
-export default withCookies(withRouter(MainApp));
+const mapDispatchToProps = dispatch => ({
+	setCurrentUser: user => dispatch(setCurrentUser(user))
+});
+
+export default connect(
+	null,
+	mapDispatchToProps
+)(withCookies(withRouter(MainApp)));
