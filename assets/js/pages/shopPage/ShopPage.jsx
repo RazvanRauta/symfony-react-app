@@ -4,19 +4,20 @@
  * Time: 15:22
  */
 
-import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import React, {Component} from 'react';
+import {withRouter} from 'react-router-dom';
 import axios from 'axios';
 import styles from './ShopPage.scss';
 import CollectionPreview from '../../components/collection-preview/CollectionPreview';
 import Spinner from '../../components/spinner/Spinner';
-import { instanceOf } from 'prop-types';
-import { Cookies, withCookies } from 'react-cookie';
+import {instanceOf} from 'prop-types';
+import {Cookies, withCookies} from 'react-cookie';
 
 class ShopPage extends Component {
 	static propTypes = {
 		cookies: instanceOf(Cookies).isRequired
 	};
+
 	constructor(props) {
 		super(props);
 
@@ -37,7 +38,6 @@ class ShopPage extends Component {
 				})
 				.then(response => {
 					this.setState({ collections: response.data });
-					this.props.handleLogIn();
 				})
 				.catch(error => {
 					this.props.history.push('/signIn');

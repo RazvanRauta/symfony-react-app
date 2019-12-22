@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.scss';
 import HomePage from './pages/homePage/HomePage';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import ErrorPage from './pages/errorPage/ErrorPage';
 import ShopPage from './pages/shopPage/ShopPage';
@@ -68,12 +68,22 @@ class MainApp extends Component {
 				<Switch>
 					<Route exact path="/" component={HomePage} />
 					<Route
+						exact
 						path="/shop"
-						render={() => <ShopPage handleLogIn={this.handleLogIn} />}
+						render={() =>
+							!this.props.currentUser ? <Redirect to="/signIn" /> : <ShopPage />
+						}
 					/>
 					<Route
+						exact
 						path="/signIn"
-						render={() => <SignInUp handleLogIn={this.handleLogIn} />}
+						render={() =>
+							this.props.currentUser ? (
+								<Redirect to="/shop" />
+							) : (
+								<SignInUp handleLogIn={this.handleLogIn} />
+							)
+						}
 					/>
 					<Route component={ErrorPage} />
 				</Switch>
@@ -82,11 +92,15 @@ class MainApp extends Component {
 	}
 }
 
+const mapStateToProps = ({ user }) => ({
+	currentUser: user.currentUser
+});
+
 const mapDispatchToProps = dispatch => ({
 	setCurrentUser: user => dispatch(setCurrentUser(user))
 });
 
 export default connect(
-	null,
+	mapStateToProps,
 	mapDispatchToProps
 )(withCookies(withRouter(MainApp)));
