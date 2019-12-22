@@ -17,6 +17,7 @@ class ShopPage extends Component {
 	static propTypes = {
 		cookies: instanceOf(Cookies).isRequired
 	};
+
 	constructor(props) {
 		super(props);
 
@@ -37,7 +38,6 @@ class ShopPage extends Component {
 				})
 				.then(response => {
 					this.setState({ collections: response.data });
-					this.props.handleLogIn();
 				})
 				.catch(error => {
 					this.props.history.push('/signIn');

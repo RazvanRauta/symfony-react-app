@@ -13,7 +13,6 @@ import CustomButton from '../custom-button/CustomButton';
 import { instanceOf } from 'prop-types';
 import { Cookies, withCookies } from 'react-cookie';
 import ProfileSpinner from '../profile-spinner/ProfileSpinner';
-import FileBase64 from 'react-file-base64';
 
 class SignUp extends Component {
 	static propTypes = {
@@ -101,11 +100,23 @@ class SignUp extends Component {
 
 	handleChange = event => {
 		const { value, name } = event.target;
-		this.setState({ [name]: value });
-	};
+		if (name !== 'picture') {
+			this.setState({ [name]: value });
+		} else {
+			const file = event.target.files[0];
+			const reader = new FileReader();
+			reader.readAsDataURL(file);
 
-	getFiles = file => {
-		this.setState({ picture: file.base64 });
+			reader.onload = () => {
+				console.log(file);
+				const fileToBase64 = reader.result;
+				this.setState({
+					picture: fileToBase64,
+					file: file.name
+				});
+			};
+		}
+		console.log(this.state);
 	};
 
 	render() {
@@ -152,7 +163,6 @@ class SignUp extends Component {
 						name="dateOfBirth"
 						value={dateOfBirth}
 						onChange={this.handleChange}
-						label={'Date Of Birth'}
 						required
 					/>
 					<FormInput
@@ -171,7 +181,13 @@ class SignUp extends Component {
 						label={'Confirm Password'}
 						required
 					/>
-					<FileBase64 multiple={false} onDone={this.getFiles.bind(this)} />
+					<FormInput
+						type={'file'}
+						name="picture"
+						onChange={this.handleChange}
+						required
+					/>
+
 					{loading ? (
 						<ProfileSpinner />
 					) : (
