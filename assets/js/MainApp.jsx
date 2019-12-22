@@ -68,7 +68,6 @@ class MainApp extends Component {
 				<Switch>
 					<Route exact path="/" component={HomePage} />
 					<Route
-						exact
 						path="/shop"
 						render={() =>
 							!this.props.currentUser ? <Redirect to="/signIn" /> : <ShopPage />

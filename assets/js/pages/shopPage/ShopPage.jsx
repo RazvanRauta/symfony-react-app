@@ -4,14 +4,14 @@
  * Time: 15:22
  */
 
-import React, {Component} from 'react';
-import {withRouter} from 'react-router-dom';
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import styles from './ShopPage.scss';
 import CollectionPreview from '../../components/collection-preview/CollectionPreview';
 import Spinner from '../../components/spinner/Spinner';
-import {instanceOf} from 'prop-types';
-import {Cookies, withCookies} from 'react-cookie';
+import { instanceOf } from 'prop-types';
+import { Cookies, withCookies } from 'react-cookie';
 
 class ShopPage extends Component {
 	static propTypes = {

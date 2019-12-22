@@ -2,7 +2,7 @@
 
 ## Description
 
-Small e-commerce app, made with Symfony and React. React is integrated inside Twig Templates.
+Small e-commerce app, made with Symfony, React and Redux. React is integrated inside Twig Templates.
 
 ## Requierments
 * php 7.4
