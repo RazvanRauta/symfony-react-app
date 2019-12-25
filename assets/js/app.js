@@ -4,13 +4,16 @@ import MainApp from './MainApp';
 import { BrowserRouter } from 'react-router-dom';
 import { CookiesProvider } from 'react-cookie';
 import { Provider } from 'react-redux';
-import store from './redux/store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from './redux/store';
 
 const app = (
 	<Provider store={store}>
 		<BrowserRouter>
 			<CookiesProvider>
-				<MainApp />
+				<PersistGate persistor={persistor}>
+					<MainApp />
+				</PersistGate>
 			</CookiesProvider>
 		</BrowserRouter>
 	</Provider>

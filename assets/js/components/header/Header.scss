@@ -12,9 +12,15 @@
   margin-bottom: 25px;
 
   .logoContainer {
-    height: 100%;
-    width: 70px;
-    padding: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 15px;
+  }
+
+  .logo {
+    width: 50px;
+    height: 50px;
   }
 
   .options {
@@ -38,12 +44,11 @@
         display: flex;
         flex-flow: column;
         justify-content: center;
-        margin-left: 10px;
+        margin-left: 5px;
         span, a {
           font-size: 14px;
-          font-weight: 600;
           text-transform: uppercase;
-          letter-spacing: 0.5px;
+          letter-spacing: 1px;
         }
 
         a:hover{

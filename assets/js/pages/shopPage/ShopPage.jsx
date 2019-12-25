@@ -7,7 +7,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
-import styles from './ShopPage.scss';
+import styles from './ShopPage.styles.scss';
 import CollectionPreview from '../../components/collection-preview/CollectionPreview';
 import Spinner from '../../components/spinner/Spinner';
 import { instanceOf } from 'prop-types';

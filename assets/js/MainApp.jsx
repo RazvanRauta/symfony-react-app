@@ -3,6 +3,8 @@ import './App.scss';
 import HomePage from './pages/homePage/HomePage';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { selectCurrentUser } from './redux/user/user.selector';
 import ErrorPage from './pages/errorPage/ErrorPage';
 import ShopPage from './pages/shopPage/ShopPage';
 import Header from './components/header/Header';
@@ -11,6 +13,7 @@ import { instanceOf } from 'prop-types';
 import { Cookies, withCookies } from 'react-cookie';
 import axios from 'axios';
 import { setCurrentUser } from './redux/user/user.actions';
+import CheckoutPage from './pages/checkoutPage/CheckoutPage';
 
 class MainApp extends Component {
 	static propTypes = {
@@ -84,6 +87,7 @@ class MainApp extends Component {
 							)
 						}
 					/>
+					<Route exact path="/checkout" component={CheckoutPage} />
 					<Route component={ErrorPage} />
 				</Switch>
 			</div>
@@ -91,8 +95,8 @@ class MainApp extends Component {
 	}
 }
 
-const mapStateToProps = ({ user }) => ({
-	currentUser: user.currentUser
+const mapStateToProps = createStructuredSelector({
+	currentUser: selectCurrentUser
 });
 
 const mapDispatchToProps = dispatch => ({
