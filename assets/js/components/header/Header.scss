@@ -38,12 +38,11 @@
         display: flex;
         flex-flow: column;
         justify-content: center;
-        margin-left: 10px;
+        margin-left: 5px;
         span, a {
           font-size: 14px;
-          font-weight: 600;
           text-transform: uppercase;
-          letter-spacing: 0.5px;
+          letter-spacing: 1px;
         }
 
         a:hover{
