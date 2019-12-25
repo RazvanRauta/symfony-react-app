@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from '../../redux/user/user.selector';
 import { selectCartHidden } from '../../redux/cart/cart.selectors';
-import Logo from '../../../images/crown.svg';
+import Logo from '../../../images/Logo.svg';
 import { googleClient } from '../../constants';
 import { GoogleLogout } from 'react-google-login';
 import ProfileSpinner from '../profile-spinner/ProfileSpinner';
