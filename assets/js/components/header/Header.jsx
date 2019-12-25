@@ -6,14 +6,14 @@
 
 import React from 'react';
 import styles from './Header.scss';
-import {Link} from 'react-router-dom';
-import {connect} from 'react-redux';
-import {createStructuredSelector} from 'reselect';
-import {selectCurrentUser} from '../../redux/user/user.selector';
-import {selectCartHidden} from '../../redux/cart/cart.selectors';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { selectCurrentUser } from '../../redux/user/user.selector';
+import { selectCartHidden } from '../../redux/cart/cart.selectors';
 import Logo from '../../../images/crown.svg';
-import {googleClient} from '../../constants';
-import {GoogleLogout} from 'react-google-login';
+import { googleClient } from '../../constants';
+import { GoogleLogout } from 'react-google-login';
 import ProfileSpinner from '../profile-spinner/ProfileSpinner';
 import CartIcon from '../cart-icon/CartIcon';
 import CartDropdown from '../cart-dropdown/CartDropdown';
