@@ -2,6 +2,8 @@
   <dictionary name="razva">
     <words>
       <w>axios</w>
+      <w>middlewares</w>
+      <w>persistor</w>
       <w>rauta</w>
       <w>razvan</w>
     </words>
