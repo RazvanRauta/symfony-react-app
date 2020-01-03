@@ -4,8 +4,16 @@
 
 Small e-commerce app, made with Symfony, React and Redux. React is integrated inside Twig Templates.
 
+## Live view
+
+##### [https://rr-clothing.herokuapp.com/](https://rr-clothing.herokuapp.com/)
+
+<p align="center">
+  <img src="gitPics/screen.png" width="860" height="430"/>
+</p>
+
 ## Requierments
-* php 7.4
+* php 7.3
 * node-js
 * yarn
 * symfony-cli
