@@ -6,7 +6,7 @@ Small e-commerce app, made with Symfony, React and Redux. React is integrated in
 
 ## Live view
 
-`https://rr-clothing.herokuapp.com/`
+##### [https://rr-clothing.herokuapp.com/](https://rr-clothing.herokuapp.com/)
 
 <p align="center">
   <img src="gitPics/screen.png" width="860" height="430"/>
