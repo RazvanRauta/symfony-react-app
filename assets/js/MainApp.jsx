@@ -70,12 +70,7 @@ class MainApp extends Component {
 				<Header logout={this.handleLogOut} loading={this.state.loading} />
 				<Switch>
 					<Route exact path="/" component={HomePage} />
-					<Route
-						path="/shop"
-						render={() =>
-							!this.props.currentUser ? <Redirect to="/signIn" /> : <ShopPage />
-						}
-					/>
+					<Route path="/shop" component={ShopPage} />
 					<Route
 						exact
 						path="/signIn"
