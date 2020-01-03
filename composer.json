@@ -2,6 +2,7 @@
     "type": "project",
     "license": "proprietary",
     "require": {
+        "doctrine/doctrine-fixtures-bundle": "^3.3",
         "php": "^7.3.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
