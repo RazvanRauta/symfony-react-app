@@ -36,10 +36,5 @@
       }
     ],
       "@babel/preset-react"
-  ],
-  "env": {
-    "production": {
-      "presets": ["react-optimize"]
-    }
-  }
+  ]
 }
