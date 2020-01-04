@@ -12,10 +12,17 @@
   .title {
     font-size: 28px;
     margin-bottom: 25px;
+    font-weight: bold;
+    cursor: pointer;
   }
 
   .preview {
     display: flex;
     justify-content: space-between;
+
+    @media (max-width: 420px) {
+      flex-flow: column;
+      width: 100%;
+    }
   }
 }

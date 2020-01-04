@@ -12,4 +12,11 @@
   .title {
     margin: 10px 0;
   }
+  @media (max-width: 420px) {
+    width: 100%;
+    button {
+      width: 280px;
+      margin: 10px auto;
+    }
+  }
 }

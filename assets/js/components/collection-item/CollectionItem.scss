@@ -56,4 +56,23 @@
       width: 10%;
     }
   }
+
+  @media (max-width: 420px) {
+    width: 100%;
+    margin: 10px 0;
+    padding-bottom: 20px;
+    position: relative;
+    border-bottom: 2px dotted #4a4a4a;
+
+    button {
+      top: 245px;
+      width: 50%;
+    }
+
+    .collectionFooter {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+  }
 }
