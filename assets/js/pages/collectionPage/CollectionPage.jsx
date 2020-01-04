@@ -6,64 +6,54 @@
 
 import React, { Component } from 'react';
 import styles from './CollectionPage.scss';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { fetchCollectionByIdStartAsync } from '../../redux/shop/shop.actions';
 import { instanceOf } from 'prop-types';
 import { Cookies, withCookies } from 'react-cookie';
 import { withRouter } from 'react-router-dom';
 import Spinner from '../../components/spinner/Spinner';
 import CollectionItem from '../../components/collection-item/CollectionItem';
+import {
+	selectCollectionByIdForPreview,
+	selectIsCollectionFetching,
+	selectIsCollectionLoaded
+} from '../../redux/shop/shop.selector';
+import { createStructuredSelector } from 'reselect';
 
 class CollectionPage extends Component {
 	static propTypes = {
 		cookies: instanceOf(Cookies).isRequired
 	};
 
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			collection: null
-		};
-	}
-
 	componentDidMount() {
 		const {
 			cookies,
 			match: {
 				params: { collectionId }
-			}
+			},
+			fetchCollectionByIdStartAsync
 		} = this.props;
 
 		const token = cookies.get('token');
 
 		if (typeof token !== 'undefined' && token.length) {
-			axios
-				.get(`/api/products/${collectionId}`, {
-					headers: {
-						Authorization: 'bearer ' + token
-					}
-				})
-				.then(response => {
-					this.setState({ collection: response.data });
-				})
-				.catch(error => {
-					if (error.response.status === 404) {
-						alert(`Collection "${collectionId}" was not found.`);
-					}
-					this.props.history.push('/');
-				});
+			fetchCollectionByIdStartAsync(token, collectionId);
 		} else {
 			this.props.history.push('/signIn');
 		}
 	}
 
 	render() {
-		const { collection } = this.state;
-		return collection ? (
+		const { isCollectionFetching, isCollectionLoaded, collection } = this.props;
+		let collectionObj;
+		if (isCollectionLoaded) {
+			collectionObj = collection[0];
+		}
+		return !isCollectionFetching && isCollectionLoaded ? (
 			<div className={styles.collectionPage}>
-				<h2 className={styles.title}>{collection.title}</h2>
+				<h2 className={styles.title}>{collectionObj.title}</h2>
 				<div className={styles.items}>
-					{collection.products.map(item => (
+					{collectionObj.products.map(item => (
 						<CollectionItem key={item.id} item={item} />
 					))}
 				</div>
@@ -73,5 +63,17 @@ class CollectionPage extends Component {
 		);
 	}
 }
+const mapStateToProps = createStructuredSelector({
+	isCollectionFetching: selectIsCollectionFetching,
+	isCollectionLoaded: selectIsCollectionLoaded,
+	collection: selectCollectionByIdForPreview
+});
 
-export default withCookies(withRouter(CollectionPage));
+const mapDispatchToProps = dispatch => ({
+	fetchCollectionByIdStartAsync: (token, collectionId) =>
+		dispatch(fetchCollectionByIdStartAsync(token, collectionId))
+});
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(withCookies(withRouter(CollectionPage)));

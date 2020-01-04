@@ -57,7 +57,7 @@ class ApiController extends AbstractController
             }]);
 
         if ($jsonObject) {
-            $response = new JsonResponse($jsonObject);
+            $response = new JsonResponse([$jsonObject]);
         }else{
             $response = new JsonResponse([],404);
         }
