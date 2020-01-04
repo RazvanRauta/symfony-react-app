@@ -13,7 +13,7 @@ Small e-commerce app, made with Symfony, React and Redux. React is integrated in
 </p>
 
 ## Requierments
-* php 7.4
+* php 7.3
 * node-js
 * yarn
 * symfony-cli
