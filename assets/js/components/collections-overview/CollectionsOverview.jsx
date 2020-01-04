@@ -8,8 +8,15 @@ import React from 'react';
 import styles from './CollectionsOverview.scss';
 import CollectionPreview from '../collection-preview/CollectionPreview';
 import { instanceOf } from 'prop-types';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
+import { fetchCollectionsStartAsync } from '../../redux/shop/shop.actions';
+import {
+	selectCollectionsForPreview,
+	selectIsCollectionFetching,
+	selectIsCollectionsLoaded
+} from '../../redux/shop/shop.selector';
 import { Cookies, withCookies } from 'react-cookie';
-import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import Spinner from '../spinner/Spinner';
 
@@ -18,40 +25,22 @@ class CollectionsOverview extends React.Component {
 		cookies: instanceOf(Cookies).isRequired
 	};
 
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			collections: null
-		};
-	}
-
 	componentDidMount() {
-		const { cookies } = this.props;
+		const { cookies, fetchCollectionsStartAsync } = this.props;
 		const token = cookies.get('token');
 		if (typeof token !== 'undefined' && token.length) {
-			axios
-				.get('/api/products', {
-					headers: {
-						Authorization: 'bearer ' + token
-					}
-				})
-				.then(response => {
-					this.setState({ collections: response.data });
-				})
-				.catch(error => {
-					if (error.response.status === 404) {
-						alert('No products were found');
-					}
-					this.props.history.push('/');
-				});
+			fetchCollectionsStartAsync(token);
 		} else {
 			this.props.history.push('/signIn');
 		}
 	}
 	render() {
-		const { collections } = this.state;
-		return collections && collections.length > 0 ? (
+		const {
+			isCollectionFetching,
+			isCollectionsLoaded,
+			collections
+		} = this.props;
+		return !isCollectionFetching && isCollectionsLoaded ? (
 			<div className={styles.collectionsOverview}>
 				{collections.map(({ id, ...otherCollectionProps }) => (
 					<CollectionPreview key={id} {...otherCollectionProps} />
@@ -63,4 +52,17 @@ class CollectionsOverview extends React.Component {
 	}
 }
 
-export default withCookies(withRouter(CollectionsOverview));
+const mapStateToProps = createStructuredSelector({
+	isCollectionFetching: selectIsCollectionFetching,
+	isCollectionsLoaded: selectIsCollectionsLoaded,
+	collections: selectCollectionsForPreview
+});
+
+const mapDispatchToProps = dispatch => ({
+	fetchCollectionsStartAsync: token =>
+		dispatch(fetchCollectionsStartAsync(token))
+});
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(withCookies(withRouter(CollectionsOverview)));

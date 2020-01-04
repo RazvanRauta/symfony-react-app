@@ -2,11 +2,11 @@
 
 ## Description
 
-Small e-commerce app, made with Symfony, React and Redux. React is integrated inside Twig Templates.
+E-commerce app, made with Symfony, React, Redux and Redux Thunk where React is running in Twig template.
 
 ## Live view
 
-##### [https://rr-clothing.herokuapp.com/](https://rr-clothing.herokuapp.com/)
+#### [https://rr-clothing.herokuapp.com/](https://rr-clothing.herokuapp.com/)
 
 <p align="center">
   <img src="gitPics/screen.png" width="860" height="430"/>
@@ -27,7 +27,7 @@ Small e-commerce app, made with Symfony, React and Redux. React is integrated in
 
 ## Run Project
 
-`symfony run -d yarn dev-server && symfony server:start`
+`symfony run -d yarn dev-server && symfony server:start --port=80`
 
 ## Build project with docker
 

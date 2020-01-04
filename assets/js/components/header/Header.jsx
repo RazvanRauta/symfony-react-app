@@ -5,40 +5,44 @@
  */
 
 import React from 'react';
-import styles from './Header.scss';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from '../../redux/user/user.selector';
 import { selectCartHidden } from '../../redux/cart/cart.selectors';
-import Logo from '../../../images/Logo.svg';
 import { googleClient } from '../../constants';
 import { GoogleLogout } from 'react-google-login';
 import ProfileSpinner from '../profile-spinner/ProfileSpinner';
 import CartIcon from '../cart-icon/CartIcon';
 import CartDropdown from '../cart-dropdown/CartDropdown';
+import {
+	HeaderContainer,
+	Logo,
+	LogoContainer,
+	OptionLink,
+	OptionsContainer,
+	ProfilePicture,
+	UserInfo,
+	UserProfile
+} from './Header.styles';
 
 const Header = ({ logout, loading, currentUser, hidden }) => (
-	<div className={styles.header}>
-		<Link className={styles.logoContainer} to="/">
-			<Logo className={styles.logo} title="Home" />
-		</Link>
-		<div className={styles.options}>
-			<Link className={styles.option} to="/shop">
-				SHOP
-			</Link>
-			<Link className={styles.option} to="/shop">
-				CONTACT
-			</Link>
+	<HeaderContainer>
+		<LogoContainer to="/">
+			<Logo />
+		</LogoContainer>
+		<OptionsContainer>
+			<OptionLink to="/shop">SHOP</OptionLink>
+			<OptionLink to="/shop">CONTACT</OptionLink>
 			{currentUser ? <CartIcon /> : null}
 			{currentUser && currentUser.email && !loading ? (
-				<div className={styles.userProfile}>
-					<div key={'profilePicture_div'} className={styles.profilePicture}>
+				<UserProfile>
+					<ProfilePicture>
 						<img src={currentUser.imageUrl} alt="user profile" />
-					</div>
-					<div key={'userInfo_div'} className={styles.userInfo}>
-						<span className={styles.name}>{currentUser.firstName}</span>
-						<span className={styles.name}>{currentUser.lastName}</span>
+					</ProfilePicture>
+					<UserInfo>
+						<span>{currentUser.firstName}</span>
+						<span>{currentUser.lastName}</span>
 						<GoogleLogout
 							clientId={googleClient}
 							onLogoutSuccess={logout}
@@ -48,18 +52,16 @@ const Header = ({ logout, loading, currentUser, hidden }) => (
 								</Link>
 							)}
 						/>
-					</div>
-				</div>
+					</UserInfo>
+				</UserProfile>
 			) : loading ? (
 				<ProfileSpinner />
 			) : (
-				<Link className={styles.option} to={'/signIn'}>
-					SIGN IN
-				</Link>
+				<OptionLink to={'/signIn'}>SIGN IN</OptionLink>
 			)}
-		</div>
+		</OptionsContainer>
 		{hidden ? null : <CartDropdown />}
-	</div>
+	</HeaderContainer>
 );
 
 const mapStateToProps = createStructuredSelector({
