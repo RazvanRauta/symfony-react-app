@@ -73,4 +73,15 @@
             font-size: 16px;
         }
     }
+
+    @media (max-width: 420px) {
+
+        flex-basis: 100%;
+        width: 100%;
+
+        &.large {
+            height: 240px;
+        }
+
+    }
 }

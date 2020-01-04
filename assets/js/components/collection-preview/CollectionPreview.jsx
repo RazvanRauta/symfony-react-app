@@ -7,10 +7,13 @@
 import React from 'react';
 import styles from './CollectionPreview.scss';
 import CollectionItem from '../collection-item/CollectionItem';
+import { Link } from 'react-router-dom';
 
-const CollectionPreview = ({ title, products }) => (
+const CollectionPreview = ({ title, products, routeName }) => (
 	<div className={styles.collectionPreview}>
-		<h1 className={styles.title}>{title.toUpperCase()}</h1>
+		<Link className={styles.title} to={`/shop/${routeName}`}>
+			{title.toUpperCase()}
+		</Link>
 		<div className={styles.preview}>
 			{products
 				.filter((item, idx) => idx < 4)

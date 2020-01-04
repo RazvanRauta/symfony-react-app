@@ -11,6 +11,10 @@ import LogoImg from '../../../images/Logo.svg';
 const OptionContainerStyles = css`
 	padding: 10px 15px;
 	cursor: pointer;
+
+	@media (max-width: 420px) {
+		padding: 10px 0;
+	}
 `;
 
 export const HeaderContainer = styled.div`
@@ -19,6 +23,10 @@ export const HeaderContainer = styled.div`
 	display: flex;
 	justify-content: space-between;
 	margin-bottom: 25px;
+
+	@media (max-width: 420px) {
+		justify-content: space-evenly;
+	}
 `;
 
 export const LogoContainer = styled(Link)`
@@ -26,6 +34,10 @@ export const LogoContainer = styled(Link)`
 	justify-content: center;
 	align-items: center;
 	padding: 10px 15px;
+
+	@media (max-width: 420px) {
+		padding: 10px 0;
+	}
 `;
 
 export const Logo = styled(LogoImg)`
@@ -39,6 +51,11 @@ export const OptionsContainer = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
+
+	@media (max-width: 420px) {
+		width: 100%;
+		justify-content: space-evenly;
+	}
 `;
 
 export const OptionLink = styled(Link)`
@@ -50,6 +67,10 @@ export const UserProfile = styled.div`
 	grid-template-columns: 1fr 1fr;
 	padding: 10px 15px;
 	justify-content: space-between;
+
+	@media (max-width: 420px) {
+		padding: 10px 0;
+	}
 `;
 
 export const UserInfo = styled.div`

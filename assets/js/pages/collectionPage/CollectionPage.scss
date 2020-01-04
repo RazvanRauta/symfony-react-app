@@ -21,5 +21,10 @@
     & .collectionItem {
       margin-bottom: 30px;
     }
+
+    @media (max-width: 420px){
+      display: flex;
+      flex-flow: column;
+    }
   }
 }
