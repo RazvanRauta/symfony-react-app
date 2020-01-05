@@ -7,6 +7,7 @@
 .signInOut {
   width: 850px;
   display: flex;
+  justify-content: space-around;
   margin: 30px auto;
 
   @media (max-width: 420px) {

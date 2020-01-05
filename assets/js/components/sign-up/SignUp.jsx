@@ -5,20 +5,20 @@
  */
 
 import React, { Component } from 'react';
-import axios from 'axios';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import styles from './SignUp.scss';
 import FormInput from '../form-input/FormInput';
 import CustomButton from '../custom-button/CustomButton';
-import { instanceOf } from 'prop-types';
-import { Cookies, withCookies } from 'react-cookie';
 import ProfileSpinner from '../profile-spinner/ProfileSpinner';
+import {
+	selectIsTokenLoading,
+	selectIsUserLoaded
+} from '../../redux/user/user.selector';
+import { registerUserStart } from '../../redux/user/user.actions';
 
 class SignUp extends Component {
-	static propTypes = {
-		cookies: instanceOf(Cookies).isRequired
-	};
-
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -28,14 +28,13 @@ class SignUp extends Component {
 			firstName: '',
 			lastName: '',
 			dateOfBirth: '',
-			picture: '',
-			loading: false
+			picture: ''
 		};
 	}
 
 	handleSubmit = async event => {
 		event.preventDefault();
-		const { cookies } = this.props;
+		const { history, registerUser, isUserLoaded } = this.props;
 
 		const {
 			email,
@@ -51,51 +50,29 @@ class SignUp extends Component {
 			return;
 		}
 
-		this.setState({ loading: true });
+		const userData = {
+			email,
+			password,
+			confirmPassword,
+			firstName,
+			lastName,
+			dateOfBirth,
+			picture
+		};
 
-		axios
-			.post('/api/register', {
-				email,
-				password,
-				firstName,
-				lastName,
-				dateOfBirth,
-				picture
-			})
-			.then(response => {
-				if (response.data && response.data.token) {
-					cookies.set('token', response.data.token, {
-						path: '/',
-						sameSite: true,
-						secure: process.env.NODE_ENV !== 'development',
-						maxAge: 604800
-					});
-					this.setState({
-						email: '',
-						password: '',
-						confirmPassword: '',
-						firstName: '',
-						lastName: '',
-						dateOfBirth: '',
-						loading: false
-					});
-					this.props.handleLogIn();
-					this.props.history.push('/shop');
-				}
-			})
-			.catch(error => {
-				this.setState({ loading: false });
-				if (
-					error.response &&
-					error.response.data &&
-					error.response.data.message
-				) {
-					alert(error.response.data.message);
-					console.error(error.response.data.message);
-				} else {
-					console.error(error);
-				}
+		registerUser(userData);
+		if (isUserLoaded) {
+			this.setState({
+				email: '',
+				password: '',
+				confirmPassword: '',
+				firstName: '',
+				lastName: '',
+				dateOfBirth: '',
+				loading: false
 			});
+			history.push('/shop');
+		}
 	};
 
 	handleChange = event => {
@@ -116,7 +93,6 @@ class SignUp extends Component {
 				});
 			};
 		}
-		console.log(this.state);
 	};
 
 	render() {
@@ -126,9 +102,9 @@ class SignUp extends Component {
 			confirmPassword,
 			firstName,
 			lastName,
-			dateOfBirth,
-			loading
+			dateOfBirth
 		} = this.state;
+		const { isTokenLoading } = this.props;
 		return (
 			<div className={styles.signUp}>
 				<h2 className={styles.title}>I do not have a account</h2>
@@ -188,7 +164,7 @@ class SignUp extends Component {
 						required
 					/>
 
-					{loading ? (
+					{isTokenLoading ? (
 						<ProfileSpinner />
 					) : (
 						<CustomButton type={'submit'}>SIGN UP</CustomButton>
@@ -199,4 +175,13 @@ class SignUp extends Component {
 	}
 }
 
-export default withCookies(withRouter(SignUp));
+const mapStateToProps = createStructuredSelector({
+	isTokenLoading: selectIsTokenLoading,
+	isUserLoaded: selectIsUserLoaded
+});
+
+const mapDispatchToProps = dispatch => ({
+	registerUser: userData => dispatch(registerUserStart(userData))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SignUp));
