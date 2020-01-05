@@ -7,29 +7,26 @@
 import React from 'react';
 import styles from './CollectionsOverview.scss';
 import CollectionPreview from '../collection-preview/CollectionPreview';
-import { instanceOf } from 'prop-types';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import { fetchCollectionsStartAsync } from '../../redux/shop/shop.actions';
 import {
 	selectCollectionsForPreview,
 	selectIsCollectionFetching,
 	selectIsCollectionsLoaded
 } from '../../redux/shop/shop.selector';
-import { Cookies, withCookies } from 'react-cookie';
 import { withRouter } from 'react-router-dom';
 import Spinner from '../spinner/Spinner';
+import { fetchCollectionsStart } from '../../redux/shop/shop.actions';
+import {
+	selectCurrentToken,
+	selectIsTokenLoaded
+} from '../../redux/user/user.selector';
 
 class CollectionsOverview extends React.Component {
-	static propTypes = {
-		cookies: instanceOf(Cookies).isRequired
-	};
-
 	componentDidMount() {
-		const { cookies, fetchCollectionsStartAsync } = this.props;
-		const token = cookies.get('token');
-		if (typeof token !== 'undefined' && token.length) {
-			fetchCollectionsStartAsync(token);
+		const { fetchCollectionsStart, token, isTokenLoaded } = this.props;
+		if (isTokenLoaded && token) {
+			fetchCollectionsStart(token);
 		} else {
 			this.props.history.push('/signIn');
 		}
@@ -55,14 +52,15 @@ class CollectionsOverview extends React.Component {
 const mapStateToProps = createStructuredSelector({
 	isCollectionFetching: selectIsCollectionFetching,
 	isCollectionsLoaded: selectIsCollectionsLoaded,
-	collections: selectCollectionsForPreview
+	collections: selectCollectionsForPreview,
+	token: selectCurrentToken,
+	isTokenLoaded: selectIsTokenLoaded
 });
 
 const mapDispatchToProps = dispatch => ({
-	fetchCollectionsStartAsync: token =>
-		dispatch(fetchCollectionsStartAsync(token))
+	fetchCollectionsStart: token => dispatch(fetchCollectionsStart(token))
 });
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(withCookies(withRouter(CollectionsOverview)));
+)(withRouter(CollectionsOverview));

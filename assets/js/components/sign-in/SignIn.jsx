@@ -6,20 +6,24 @@
 
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import axios from 'axios';
+import { connect } from 'react-redux';
 import styles from './SignIn.scss';
 import FormInput from '../form-input/FormInput';
 import CustomButton from '../custom-button/CustomButton';
 import { GoogleLogin } from 'react-google-login';
-import { instanceOf } from 'prop-types';
-import { Cookies, withCookies } from 'react-cookie';
 import { googleClient } from '../../constants';
+import {
+	emailSignInStart,
+	googleSignInStart
+} from '../../redux/user/user.actions';
+import { createStructuredSelector } from 'reselect';
+import {
+	selectCurrentToken,
+	selectIsTokenLoaded,
+	selectIsUserLoaded
+} from '../../redux/user/user.selector';
 
 class SignIn extends Component {
-	static propTypes = {
-		cookies: instanceOf(Cookies).isRequired
-	};
-
 	constructor(props) {
 		super(props);
 
@@ -31,25 +35,17 @@ class SignIn extends Component {
 
 	handleSubmit = async event => {
 		event.preventDefault();
-		const { cookies } = this.props;
-		axios
-			.post('/api/login', {
-				email: event.target.email.value,
-				password: event.target.password.value
-			})
-			.then(response => {
-				if (response.data && response.data.token) {
-					cookies.set('token', response.data.token, {
-						path: '/',
-						sameSite: true,
-						secure: process.env.NODE_ENV !== 'development',
-						maxAge: 604800
-					});
-					this.props.handleLogIn();
-					this.props.history.push('/shop');
-				}
-			})
-			.catch(error => console.error(error));
+		const { emailSignInStart, isUserLoaded, history } = this.props;
+		const userInfo = {
+			email: event.target.email.value,
+			password: event.target.password.value
+		};
+
+		emailSignInStart(userInfo);
+
+		if (isUserLoaded) {
+			history.push('/shop');
+		}
 	};
 
 	handleChange = event => {
@@ -57,41 +53,26 @@ class SignIn extends Component {
 		this.setState({ [name]: value });
 	};
 
-	handleLoginFromGoogle = async ({
-		email,
-		givenName,
-		familyName,
-		imageUrl
-	}) => {
-		const { cookies } = this.props;
-		axios
-			.post('/api/getToken', {
-				email,
-				firstName: givenName,
-				lastName: familyName,
-				imageUrl
-			})
-			.then(response => {
-				if (response.data && response.data.token) {
-					cookies.set('token', response.data.token, {
-						path: '/',
-						sameSite: true,
-						secure: process.env.NODE_ENV !== 'development',
-						maxAge: 604800
-					});
-					this.props.handleLogIn();
-					this.props.history.push('/shop');
-				}
-			})
-			.catch(error => console.error(error));
+	handleLoginFromGoogle = ({ email, givenName, familyName, imageUrl }) => {
+		const { isUserLoaded, googleSignInStart, history } = this.props;
+		const userInfo = {
+			email,
+			firstName: givenName,
+			lastName: familyName,
+			imageUrl
+		};
+
+		googleSignInStart(userInfo);
+
+		if (isUserLoaded) {
+			history.push('/shop');
+		}
 	};
 
 	responseGoogle = response => {
 		if (typeof response !== 'undefined' && response.profileObj) {
 			const userObject = response.profileObj;
-			this.handleLoginFromGoogle(userObject).catch(error =>
-				console.error(error)
-			);
+			this.handleLoginFromGoogle(userObject);
 		}
 	};
 
@@ -141,4 +122,15 @@ class SignIn extends Component {
 	}
 }
 
-export default withCookies(withRouter(SignIn));
+const mapStateToProps = createStructuredSelector({
+	isTokenLoaded: selectIsTokenLoaded,
+	token: selectCurrentToken,
+	isUserLoaded: selectIsUserLoaded
+});
+
+const mapDispatchToProps = dispatch => ({
+	googleSignInStart: userInfo => dispatch(googleSignInStart(userInfo)),
+	emailSignInStart: userInfo => dispatch(emailSignInStart(userInfo))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SignIn));

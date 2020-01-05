@@ -33,7 +33,7 @@ export const LogoContainer = styled(Link)`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding: 10px 15px;
+	padding: 10px 15px 10px 0;
 
 	@media (max-width: 420px) {
 		padding: 10px 0;
@@ -65,7 +65,7 @@ export const OptionLink = styled(Link)`
 export const UserProfile = styled.div`
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	padding: 10px 15px;
+	padding: 10px 0 10px 15px;
 	justify-content: space-between;
 
 	@media (max-width: 420px) {

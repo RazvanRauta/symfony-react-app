@@ -19,17 +19,24 @@ const shopReducer = (state = INITIAL_STATE, action) => {
 				...state,
 				isFetching: true
 			};
+		case ShopActionTypes.FETCH_COLLECTION_BY_ID_START:
+			return {
+				...state,
+				isFetching: true
+			};
 		case ShopActionTypes.FETCH_COLLECTIONS_SUCCESS:
 			return {
 				...state,
 				isFetching: false,
-				collections: action.payload
+				collections: action.payload,
+				errorMessage: undefined
 			};
 		case ShopActionTypes.FETCH_COLLECTION_BY_ID_SUCCESS:
 			return {
 				...state,
 				isFetching: false,
-				collection: action.payload
+				collection: action.payload,
+				errorMessage: undefined
 			};
 		case ShopActionTypes.FETCH_COLLECTIONS_FAILURE:
 			return {

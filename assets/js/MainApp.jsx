@@ -4,70 +4,42 @@ import HomePage from './pages/homePage/HomePage';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectCurrentUser } from './redux/user/user.selector';
+import {
+	selectCurrentToken,
+	selectIsTokenLoaded,
+	selectIsUserLoaded
+} from './redux/user/user.selector';
 import ErrorPage from './pages/errorPage/ErrorPage';
 import ShopPage from './pages/shopPage/ShopPage';
 import Header from './components/header/Header';
 import SignInUp from './pages/signInUpPage/SignInUp';
-import { instanceOf } from 'prop-types';
-import { Cookies, withCookies } from 'react-cookie';
-import axios from 'axios';
-import { setCurrentUser } from './redux/user/user.actions';
+import {
+	fetchCurrentUserStart,
+	logOutCurrentUser
+} from './redux/user/user.actions';
 import CheckoutPage from './pages/checkoutPage/CheckoutPage';
 
 class MainApp extends Component {
-	static propTypes = {
-		cookies: instanceOf(Cookies).isRequired
-	};
-
-	constructor(props) {
-		super(props);
-		this.state = {
-			loading: false
-		};
-	}
-
 	componentDidMount() {
-		this.handleLogIn().catch(error => console.log(error));
+		this.handleLogIn();
 	}
 
-	handleLogIn = async () => {
-		const { cookies, setCurrentUser } = this.props;
-		const token = cookies.get('token');
-		if (typeof token !== 'undefined' && token.length && !this.state.email) {
-			this.setState({ loading: true });
-			axios
-				.get('/api/userInfo', {
-					headers: {
-						Authorization: 'bearer ' + token
-					}
-				})
-				.then(response => {
-					if (response && response.data) {
-						setCurrentUser({ ...response.data });
-						this.setState({ loading: false });
-					}
-				})
-				.catch(error => {
-					this.handleLogOut();
-					console.log(error);
-				});
+	handleLogIn = () => {
+		const { fetchCurrentUser, token, isUserLoaded, isTokenLoaded } = this.props;
+		if (!isUserLoaded && isTokenLoaded) {
+			fetchCurrentUser(token);
 		}
 	};
 
 	handleLogOut = () => {
-		const { cookies, setCurrentUser } = this.props;
-		cookies.remove('token');
-		this.setState({
-			loading: false
-		});
-		setCurrentUser(null);
+		const { logOutCurrentUser } = this.props;
+		logOutCurrentUser();
 	};
 
 	render() {
 		return (
 			<div id="main-container">
-				<Header logout={this.handleLogOut} loading={this.state.loading} />
+				<Header logout={this.handleLogOut} />
 				<Switch>
 					<Route exact path="/" component={HomePage} />
 					<Route path="/shop" component={ShopPage} />
@@ -75,7 +47,7 @@ class MainApp extends Component {
 						exact
 						path="/signIn"
 						render={() =>
-							this.props.currentUser ? (
+							this.props.isUserLoaded ? (
 								<Redirect to="/shop" />
 							) : (
 								<SignInUp handleLogIn={this.handleLogIn} />
@@ -91,14 +63,17 @@ class MainApp extends Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-	currentUser: selectCurrentUser
+	isUserLoaded: selectIsUserLoaded,
+	isTokenLoaded: selectIsTokenLoaded,
+	token: selectCurrentToken
 });
 
 const mapDispatchToProps = dispatch => ({
-	setCurrentUser: user => dispatch(setCurrentUser(user))
+	fetchCurrentUser: token => dispatch(fetchCurrentUserStart(token)),
+	logOutCurrentUser: () => dispatch(logOutCurrentUser())
 });
 
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(withCookies(withRouter(MainApp)));
+)(withRouter(MainApp));

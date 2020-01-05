@@ -8,7 +8,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectCurrentUser } from '../../redux/user/user.selector';
+import {
+	selectCurrentUser,
+	selectIsUserLoading
+} from '../../redux/user/user.selector';
 import { selectCartHidden } from '../../redux/cart/cart.selectors';
 import { googleClient } from '../../constants';
 import { GoogleLogout } from 'react-google-login';
@@ -66,6 +69,7 @@ const Header = ({ logout, loading, currentUser, hidden }) => (
 
 const mapStateToProps = createStructuredSelector({
 	currentUser: selectCurrentUser,
+	loading: selectIsUserLoading,
 	hidden: selectCartHidden
 });
 export default connect(mapStateToProps)(Header);

@@ -7,9 +7,7 @@
 import React, { Component } from 'react';
 import styles from './CollectionPage.scss';
 import { connect } from 'react-redux';
-import { fetchCollectionByIdStartAsync } from '../../redux/shop/shop.actions';
-import { instanceOf } from 'prop-types';
-import { Cookies, withCookies } from 'react-cookie';
+import { fetchCollectionByIdStart } from '../../redux/shop/shop.actions';
 import { withRouter } from 'react-router-dom';
 import Spinner from '../../components/spinner/Spinner';
 import CollectionItem from '../../components/collection-item/CollectionItem';
@@ -19,25 +17,24 @@ import {
 	selectIsCollectionLoaded
 } from '../../redux/shop/shop.selector';
 import { createStructuredSelector } from 'reselect';
+import {
+	selectCurrentToken,
+	selectIsTokenLoaded
+} from '../../redux/user/user.selector';
 
 class CollectionPage extends Component {
-	static propTypes = {
-		cookies: instanceOf(Cookies).isRequired
-	};
-
 	componentDidMount() {
 		const {
-			cookies,
 			match: {
 				params: { collectionId }
 			},
-			fetchCollectionByIdStartAsync
+			fetchCollectionByIdStart,
+			token,
+			isTokenLoaded
 		} = this.props;
 
-		const token = cookies.get('token');
-
-		if (typeof token !== 'undefined' && token.length) {
-			fetchCollectionByIdStartAsync(token, collectionId);
+		if (isTokenLoaded && token) {
+			fetchCollectionByIdStart(token, collectionId);
 		} else {
 			this.props.history.push('/signIn');
 		}
@@ -66,14 +63,16 @@ class CollectionPage extends Component {
 const mapStateToProps = createStructuredSelector({
 	isCollectionFetching: selectIsCollectionFetching,
 	isCollectionLoaded: selectIsCollectionLoaded,
-	collection: selectCollectionByIdForPreview
+	collection: selectCollectionByIdForPreview,
+	token: selectCurrentToken,
+	isTokenLoaded: selectIsTokenLoaded
 });
 
 const mapDispatchToProps = dispatch => ({
-	fetchCollectionByIdStartAsync: (token, collectionId) =>
-		dispatch(fetchCollectionByIdStartAsync(token, collectionId))
+	fetchCollectionByIdStart: (token, collectionId) =>
+		dispatch(fetchCollectionByIdStart(token, collectionId))
 });
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(withCookies(withRouter(CollectionPage)));
+)(withRouter(CollectionPage));
