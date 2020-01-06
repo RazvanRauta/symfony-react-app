@@ -18,7 +18,8 @@ const userReducer = (state = INITiAL_STATE, action) => {
 			return {
 				...state,
 				currentUser: null,
-				token: null
+				token: null,
+				errorMessage: undefined
 			};
 		case UserActionType.GOOGLE_SIGN_IN_START:
 		case UserActionType.EMAIL_SIGN_IN_START:
@@ -26,7 +27,8 @@ const userReducer = (state = INITiAL_STATE, action) => {
 		case UserActionType.REGISTER_USER_START:
 			return {
 				...state,
-				isLoading: true
+				isLoading: true,
+				errorMessage: undefined
 			};
 		case UserActionType.GOOGLE_SIGN_IN_SUCCESS:
 		case UserActionType.EMAIL_SIGN_IN_SUCCESS:

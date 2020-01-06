@@ -34,7 +34,7 @@ export function* signInWithGoogle(action) {
 		);
 		yield put(fetchCurrentUserSuccess(userResponse.data));
 	} catch (error) {
-		googleSignInFailure(error);
+		yield put(googleSignInFailure(error));
 	}
 }
 
@@ -53,7 +53,7 @@ export function* signInWithEmail(action) {
 		);
 		yield put(fetchCurrentUserSuccess(userResponse.data));
 	} catch (error) {
-		emailSignInFailure(error);
+		yield put(emailSignInFailure(error));
 	}
 }
 
@@ -66,7 +66,7 @@ export function* fetchCurrentUser(action) {
 		const userResponse = yield call(fetchCurrentUser_API, action.token);
 		yield put(fetchCurrentUserSuccess(userResponse.data));
 	} catch (error) {
-		fetchCurrentUserFailure(error);
+		yield put(fetchCurrentUserFailure(error));
 	}
 }
 
@@ -85,7 +85,7 @@ export function* registerUser(action) {
 		);
 		yield put(fetchCurrentUserSuccess(userResponse.data));
 	} catch (error) {
-		registerUserFailure(error);
+		yield put(registerUserFailure(error));
 	}
 }
 

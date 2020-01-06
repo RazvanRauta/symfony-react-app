@@ -37,3 +37,8 @@ export const selectIsTokenLoaded = createSelector(
 	[selectUser],
 	user => !!user.token
 );
+
+export const selectUserErrorMessage = createSelector(
+	[selectUser],
+	user => user.errorMessage
+);

@@ -43,3 +43,8 @@ export const selectIsCollectionLoaded = createSelector(
 	[selectShop],
 	shop => !!shop.collection
 );
+
+export const selectShopErrorMessage = createSelector(
+	[selectShop],
+	shop => shop.errorMessage
+);

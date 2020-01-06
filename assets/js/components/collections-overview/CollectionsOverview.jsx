@@ -12,7 +12,8 @@ import { connect } from 'react-redux';
 import {
 	selectCollectionsForPreview,
 	selectIsCollectionFetching,
-	selectIsCollectionsLoaded
+	selectIsCollectionsLoaded,
+	selectShopErrorMessage
 } from '../../redux/shop/shop.selector';
 import { withRouter } from 'react-router-dom';
 import Spinner from '../spinner/Spinner';
@@ -35,8 +36,16 @@ class CollectionsOverview extends React.Component {
 		const {
 			isCollectionFetching,
 			isCollectionsLoaded,
-			collections
+			collections,
+			errorMessage,
+			history
 		} = this.props;
+
+		if (errorMessage) {
+			alert(errorMessage);
+			history.push('/');
+		}
+
 		return !isCollectionFetching && isCollectionsLoaded ? (
 			<div className={styles.collectionsOverview}>
 				{collections.map(({ id, ...otherCollectionProps }) => (
@@ -54,7 +63,8 @@ const mapStateToProps = createStructuredSelector({
 	isCollectionsLoaded: selectIsCollectionsLoaded,
 	collections: selectCollectionsForPreview,
 	token: selectCurrentToken,
-	isTokenLoaded: selectIsTokenLoaded
+	isTokenLoaded: selectIsTokenLoaded,
+	errorMessage: selectShopErrorMessage
 });
 
 const mapDispatchToProps = dispatch => ({

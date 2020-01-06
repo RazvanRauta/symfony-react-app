@@ -2,7 +2,7 @@
 
 ## Description
 
-E-commerce app, made with Symfony, React, Redux and Redux Thunk where React is running in Twig template.
+E-commerce app, made with Symfony, React, Redux and Redux Saga where React is running in Twig template.
 
 ## Live view
 

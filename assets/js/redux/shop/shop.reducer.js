@@ -17,12 +17,14 @@ const shopReducer = (state = INITIAL_STATE, action) => {
 		case ShopActionTypes.FETCH_COLLECTIONS_START:
 			return {
 				...state,
-				isFetching: true
+				isFetching: true,
+				errorMessage: undefined
 			};
 		case ShopActionTypes.FETCH_COLLECTION_BY_ID_START:
 			return {
 				...state,
-				isFetching: true
+				isFetching: true,
+				errorMessage: undefined
 			};
 		case ShopActionTypes.FETCH_COLLECTIONS_SUCCESS:
 			return {

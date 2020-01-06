@@ -14,7 +14,8 @@ import CustomButton from '../custom-button/CustomButton';
 import ProfileSpinner from '../profile-spinner/ProfileSpinner';
 import {
 	selectIsTokenLoading,
-	selectIsUserLoaded
+	selectIsUserLoaded,
+	selectUserErrorMessage
 } from '../../redux/user/user.selector';
 import { registerUserStart } from '../../redux/user/user.actions';
 
@@ -34,7 +35,7 @@ class SignUp extends Component {
 
 	handleSubmit = async event => {
 		event.preventDefault();
-		const { history, registerUser, isUserLoaded } = this.props;
+		const { history, registerUser, isUserLoaded, errorMessage } = this.props;
 
 		const {
 			email,
@@ -61,17 +62,41 @@ class SignUp extends Component {
 		};
 
 		registerUser(userData);
-		if (isUserLoaded) {
-			this.setState({
-				email: '',
-				password: '',
-				confirmPassword: '',
-				firstName: '',
-				lastName: '',
-				dateOfBirth: '',
-				loading: false
-			});
-			history.push('/shop');
+
+		switch (true) {
+			case typeof errorMessage !== 'undefined':
+				this.setState({
+					email: '',
+					password: '',
+					confirmPassword: '',
+					firstName: '',
+					lastName: '',
+					dateOfBirth: ''
+				});
+				alert(errorMessage);
+				history.push('/signIn');
+				break;
+			case isUserLoaded:
+				this.setState({
+					email: '',
+					password: '',
+					confirmPassword: '',
+					firstName: '',
+					lastName: '',
+					dateOfBirth: ''
+				});
+				history.push('/shop');
+				break;
+			default:
+				this.setState({
+					email: '',
+					password: '',
+					confirmPassword: '',
+					firstName: '',
+					lastName: '',
+					dateOfBirth: ''
+				});
+				return;
 		}
 	};
 
@@ -177,7 +202,8 @@ class SignUp extends Component {
 
 const mapStateToProps = createStructuredSelector({
 	isTokenLoading: selectIsTokenLoading,
-	isUserLoaded: selectIsUserLoaded
+	isUserLoaded: selectIsUserLoaded,
+	errorMessage: selectUserErrorMessage
 });
 
 const mapDispatchToProps = dispatch => ({
