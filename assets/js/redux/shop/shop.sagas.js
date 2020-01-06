@@ -25,7 +25,7 @@ export function* fetchCollectionsAsync(action) {
 
 		yield put(fetchCollectionsSuccess(collectionsMap.data));
 	} catch (error) {
-		fetchCollectionsFailure(error.message);
+		yield put(fetchCollectionsFailure(error.message));
 	}
 }
 
@@ -45,7 +45,7 @@ export function* fetchCollectionByIdAsync(action) {
 
 		yield put(fetchCollectionsByIdSuccess(collectionMap.data));
 	} catch (error) {
-		fetchCollectionsFailure(error.message);
+		yield put(fetchCollectionsFailure(error.message));
 	}
 }
 

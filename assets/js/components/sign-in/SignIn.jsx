@@ -20,7 +20,8 @@ import { createStructuredSelector } from 'reselect';
 import {
 	selectCurrentToken,
 	selectIsTokenLoaded,
-	selectIsUserLoaded
+	selectIsUserLoaded,
+	selectUserErrorMessage
 } from '../../redux/user/user.selector';
 
 class SignIn extends Component {
@@ -35,7 +36,12 @@ class SignIn extends Component {
 
 	handleSubmit = async event => {
 		event.preventDefault();
-		const { emailSignInStart, isUserLoaded, history } = this.props;
+		const {
+			emailSignInStart,
+			isUserLoaded,
+			history,
+			errorMessage
+		} = this.props;
 		const userInfo = {
 			email: event.target.email.value,
 			password: event.target.password.value
@@ -43,8 +49,16 @@ class SignIn extends Component {
 
 		emailSignInStart(userInfo);
 
-		if (isUserLoaded) {
-			history.push('/shop');
+		switch (true) {
+			case typeof errorMessage !== 'undefined':
+				alert(errorMessage);
+				history.push('/signIn');
+				break;
+			case isUserLoaded:
+				history.push('/shop');
+				break;
+			default:
+				return;
 		}
 	};
 
@@ -54,7 +68,12 @@ class SignIn extends Component {
 	};
 
 	handleLoginFromGoogle = ({ email, givenName, familyName, imageUrl }) => {
-		const { isUserLoaded, googleSignInStart, history } = this.props;
+		const {
+			isUserLoaded,
+			googleSignInStart,
+			history,
+			errorMessage
+		} = this.props;
 		const userInfo = {
 			email,
 			firstName: givenName,
@@ -64,8 +83,16 @@ class SignIn extends Component {
 
 		googleSignInStart(userInfo);
 
-		if (isUserLoaded) {
-			history.push('/shop');
+		switch (true) {
+			case typeof errorMessage !== 'undefined':
+				alert(errorMessage);
+				history.push('/signIn');
+				break;
+			case isUserLoaded:
+				history.push('/shop');
+				break;
+			default:
+				return;
 		}
 	};
 
@@ -125,7 +152,8 @@ class SignIn extends Component {
 const mapStateToProps = createStructuredSelector({
 	isTokenLoaded: selectIsTokenLoaded,
 	token: selectCurrentToken,
-	isUserLoaded: selectIsUserLoaded
+	isUserLoaded: selectIsUserLoaded,
+	errorMessage: selectUserErrorMessage
 });
 
 const mapDispatchToProps = dispatch => ({

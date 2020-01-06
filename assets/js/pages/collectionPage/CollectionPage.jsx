@@ -14,7 +14,8 @@ import CollectionItem from '../../components/collection-item/CollectionItem';
 import {
 	selectCollectionByIdForPreview,
 	selectIsCollectionFetching,
-	selectIsCollectionLoaded
+	selectIsCollectionLoaded,
+	selectShopErrorMessage
 } from '../../redux/shop/shop.selector';
 import { createStructuredSelector } from 'reselect';
 import {
@@ -41,8 +42,18 @@ class CollectionPage extends Component {
 	}
 
 	render() {
-		const { isCollectionFetching, isCollectionLoaded, collection } = this.props;
+		const {
+			isCollectionFetching,
+			isCollectionLoaded,
+			collection,
+			errorMessage,
+			history
+		} = this.props;
 		let collectionObj;
+		if (errorMessage) {
+			alert(errorMessage);
+			history.push('/');
+		}
 		if (isCollectionLoaded) {
 			collectionObj = collection[0];
 		}
@@ -65,7 +76,8 @@ const mapStateToProps = createStructuredSelector({
 	isCollectionLoaded: selectIsCollectionLoaded,
 	collection: selectCollectionByIdForPreview,
 	token: selectCurrentToken,
-	isTokenLoaded: selectIsTokenLoaded
+	isTokenLoaded: selectIsTokenLoaded,
+	errorMessage: selectShopErrorMessage
 });
 
 const mapDispatchToProps = dispatch => ({
