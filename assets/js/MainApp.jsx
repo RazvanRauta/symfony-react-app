@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import './App.scss';
 import HomePage from './pages/homePage/HomePage';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
@@ -13,54 +13,33 @@ import ErrorPage from './pages/errorPage/ErrorPage';
 import ShopPage from './pages/shopPage/ShopPage';
 import Header from './components/header/Header';
 import SignInUp from './pages/signInUpPage/SignInUp';
-import {
-	fetchCurrentUserStart,
-	logOutCurrentUser
-} from './redux/user/user.actions';
+import { fetchCurrentUserStart } from './redux/user/user.actions';
 import CheckoutPage from './pages/checkoutPage/CheckoutPage';
 
-class MainApp extends Component {
-	componentDidMount() {
-		this.handleLogIn();
-	}
-
-	handleLogIn = () => {
-		const { fetchCurrentUser, token, isUserLoaded, isTokenLoaded } = this.props;
+const MainApp = ({ fetchCurrentUser, token, isUserLoaded, isTokenLoaded }) => {
+	useEffect(() => {
 		if (!isUserLoaded && isTokenLoaded) {
 			fetchCurrentUser(token);
 		}
-	};
+	}, [fetchCurrentUser]);
 
-	handleLogOut = () => {
-		const { logOutCurrentUser } = this.props;
-		logOutCurrentUser();
-	};
-
-	render() {
-		return (
-			<div id="main-container">
-				<Header logout={this.handleLogOut} />
-				<Switch>
-					<Route exact path="/" component={HomePage} />
-					<Route path="/shop" component={ShopPage} />
-					<Route
-						exact
-						path="/signIn"
-						render={() =>
-							this.props.isUserLoaded ? (
-								<Redirect to="/shop" />
-							) : (
-								<SignInUp handleLogIn={this.handleLogIn} />
-							)
-						}
-					/>
-					<Route exact path="/checkout" component={CheckoutPage} />
-					<Route component={ErrorPage} />
-				</Switch>
-			</div>
-		);
-	}
-}
+	return (
+		<div id="main-container">
+			<Header />
+			<Switch>
+				<Route exact path="/" component={HomePage} />
+				<Route path="/shop" component={ShopPage} />
+				<Route
+					exact
+					path="/signIn"
+					render={() => (isUserLoaded ? <Redirect to="/shop" /> : <SignInUp />)}
+				/>
+				<Route exact path="/checkout" component={CheckoutPage} />
+				<Route component={ErrorPage} />
+			</Switch>
+		</div>
+	);
+};
 
 const mapStateToProps = createStructuredSelector({
 	isUserLoaded: selectIsUserLoaded,
@@ -69,8 +48,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = dispatch => ({
-	fetchCurrentUser: token => dispatch(fetchCurrentUserStart(token)),
-	logOutCurrentUser: () => dispatch(logOutCurrentUser())
+	fetchCurrentUser: token => dispatch(fetchCurrentUserStart(token))
 });
 
 export default connect(

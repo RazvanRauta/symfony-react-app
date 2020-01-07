@@ -4,7 +4,7 @@
  * Time: 19:36
  */
 
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -19,53 +19,45 @@ import {
 } from '../../redux/user/user.selector';
 import { registerUserStart } from '../../redux/user/user.actions';
 
-class SignUp extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			email: '',
-			password: '',
-			confirmPassword: '',
-			firstName: '',
-			lastName: '',
-			dateOfBirth: '',
-			picture: ''
-		};
-	}
+const SignUp = ({
+	history,
+	registerUser,
+	isUserLoaded,
+	errorMessage,
+	isTokenLoading
+}) => {
+	const [userData, setUserData] = useState({
+		email: '',
+		password: '',
+		confirmPassword: '',
+		firstName: '',
+		lastName: '',
+		dateOfBirth: '',
+		picture: ''
+	});
 
-	handleSubmit = async event => {
+	const {
+		email,
+		password,
+		confirmPassword,
+		firstName,
+		lastName,
+		dateOfBirth
+	} = userData;
+
+	const handleSubmit = async event => {
 		event.preventDefault();
-		const { history, registerUser, isUserLoaded, errorMessage } = this.props;
 
-		const {
-			email,
-			password,
-			confirmPassword,
-			firstName,
-			lastName,
-			dateOfBirth,
-			picture
-		} = this.state;
 		if (password !== confirmPassword) {
 			alert("Password don't match");
 			return;
 		}
 
-		const userData = {
-			email,
-			password,
-			confirmPassword,
-			firstName,
-			lastName,
-			dateOfBirth,
-			picture
-		};
-
 		registerUser(userData);
 
 		switch (true) {
 			case typeof errorMessage !== 'undefined':
-				this.setState({
+				setUserData({
 					email: '',
 					password: '',
 					confirmPassword: '',
@@ -77,7 +69,7 @@ class SignUp extends Component {
 				history.push('/signIn');
 				break;
 			case isUserLoaded:
-				this.setState({
+				setUserData({
 					email: '',
 					password: '',
 					confirmPassword: '',
@@ -88,7 +80,7 @@ class SignUp extends Component {
 				history.push('/shop');
 				break;
 			default:
-				this.setState({
+				setUserData({
 					email: '',
 					password: '',
 					confirmPassword: '',
@@ -100,10 +92,10 @@ class SignUp extends Component {
 		}
 	};
 
-	handleChange = event => {
+	const handleChange = event => {
 		const { value, name } = event.target;
 		if (name !== 'picture') {
-			this.setState({ [name]: value });
+			setUserData({ ...userData, [name]: value });
 		} else {
 			const file = event.target.files[0];
 			const reader = new FileReader();
@@ -112,93 +104,79 @@ class SignUp extends Component {
 			reader.onload = () => {
 				console.log(file);
 				const fileToBase64 = reader.result;
-				this.setState({
-					picture: fileToBase64,
-					file: file.name
-				});
+				setUserData({ ...userData, picture: fileToBase64, file: file.name });
 			};
 		}
 	};
 
-	render() {
-		const {
-			email,
-			password,
-			confirmPassword,
-			firstName,
-			lastName,
-			dateOfBirth
-		} = this.state;
-		const { isTokenLoading } = this.props;
-		return (
-			<div className={styles.signUp}>
-				<h2 className={styles.title}>I do not have a account</h2>
-				<span>Sing up with your email and password</span>
-				<form className={styles.signUpForm} onSubmit={this.handleSubmit}>
-					<FormInput
-						type={'text'}
-						name="firstName"
-						value={firstName}
-						onChange={this.handleChange}
-						label={'First Name'}
-						required
-					/>
-					<FormInput
-						type={'text'}
-						name="lastName"
-						value={lastName}
-						onChange={this.handleChange}
-						label={'Last Name'}
-						required
-					/>
-					<FormInput
-						type={'email'}
-						name="email"
-						value={email}
-						onChange={this.handleChange}
-						label={'Email'}
-						required
-					/>
-					<FormInput
-						type={'date'}
-						name="dateOfBirth"
-						value={dateOfBirth}
-						onChange={this.handleChange}
-						required
-					/>
-					<FormInput
-						type={'password'}
-						name="password"
-						value={password}
-						onChange={this.handleChange}
-						label={'Password'}
-						required
-					/>
-					<FormInput
-						type={'password'}
-						name="confirmPassword"
-						value={confirmPassword}
-						onChange={this.handleChange}
-						label={'Confirm Password'}
-						required
-					/>
-					<FormInput
-						type={'file'}
-						name="picture"
-						onChange={this.handleChange}
-						required
-					/>
+	return (
+		<div className={styles.signUp}>
+			<h2 className={styles.title}>I do not have a account</h2>
+			<span>Sing up with your email and password</span>
+			<form className={styles.signUpForm} onSubmit={handleSubmit}>
+				<FormInput
+					type={'text'}
+					name="firstName"
+					value={firstName}
+					onChange={handleChange}
+					label={'First Name'}
+					required
+				/>
+				<FormInput
+					type={'text'}
+					name="lastName"
+					value={lastName}
+					onChange={handleChange}
+					label={'Last Name'}
+					required
+				/>
+				<FormInput
+					type={'email'}
+					name="email"
+					value={email}
+					onChange={handleChange}
+					label={'Email'}
+					required
+				/>
+				<FormInput
+					type={'date'}
+					name="dateOfBirth"
+					value={dateOfBirth}
+					onChange={handleChange}
+					required
+				/>
+				<FormInput
+					type={'password'}
+					name="password"
+					value={password}
+					onChange={handleChange}
+					label={'Password'}
+					required
+				/>
+				<FormInput
+					type={'password'}
+					name="confirmPassword"
+					value={confirmPassword}
+					onChange={handleChange}
+					label={'Confirm Password'}
+					required
+				/>
+				<FormInput
+					type={'file'}
+					name="picture"
+					onChange={handleChange}
+					required
+				/>
 
-					{isTokenLoading ? (
-						<ProfileSpinner />
-					) : (
-						<CustomButton type={'submit'}>SIGN UP</CustomButton>
-					)}
-				</form>
-			</div>
-		);
-	}
-}
+				{isTokenLoading ? (
+					<ProfileSpinner />
+				) : (
+					<CustomButton type={'submit'}>SIGN UP</CustomButton>
+				)}
+			</form>
+		</div>
+	);
+};
 
 const mapStateToProps = createStructuredSelector({
 	isTokenLoading: selectIsTokenLoading,

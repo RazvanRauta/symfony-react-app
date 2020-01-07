@@ -28,8 +28,9 @@ import {
 	UserInfo,
 	UserProfile
 } from './Header.styles';
+import { logOutCurrentUser } from '../../redux/user/user.actions';
 
-const Header = ({ logout, loading, currentUser, hidden }) => (
+const Header = ({ logOutCurrentUser, loading, currentUser, hidden }) => (
 	<HeaderContainer>
 		<LogoContainer to="/">
 			<Logo />
@@ -48,9 +49,8 @@ const Header = ({ logout, loading, currentUser, hidden }) => (
 						<span>{currentUser.lastName}</span>
 						<GoogleLogout
 							clientId={googleClient}
-							onLogoutSuccess={logout}
 							render={() => (
-								<Link to={'/'} onClick={logout}>
+								<Link to={'/'} onClick={logOutCurrentUser}>
 									SIGN OUT
 								</Link>
 							)}
@@ -72,4 +72,8 @@ const mapStateToProps = createStructuredSelector({
 	loading: selectIsUserLoading,
 	hidden: selectCartHidden
 });
-export default connect(mapStateToProps)(Header);
+
+const mapDispatchToProps = dispatch => ({
+	logOutCurrentUser: () => dispatch(logOutCurrentUser())
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

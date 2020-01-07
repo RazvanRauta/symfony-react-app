@@ -4,7 +4,7 @@
  * Time: 14:43
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './CollectionsOverview.scss';
 import CollectionPreview from '../collection-preview/CollectionPreview';
 import { createStructuredSelector } from 'reselect';
@@ -23,9 +23,17 @@ import {
 	selectIsTokenLoaded
 } from '../../redux/user/user.selector';
 
-class CollectionsOverview extends React.Component {
-	componentDidMount() {
-		const { fetchCollectionsStart, token, isTokenLoaded, history } = this.props;
+const CollectionsOverview = ({
+	fetchCollectionsStart,
+	token,
+	isTokenLoaded,
+	history,
+	isCollectionFetching,
+	isCollectionsLoaded,
+	collections,
+	errorMessage
+}) => {
+	useEffect(() => {
 		if (isTokenLoaded && token) {
 			fetchCollectionsStart(token);
 		} else {
@@ -35,32 +43,23 @@ class CollectionsOverview extends React.Component {
 				history.push('/');
 			}
 		}
-	}
-	render() {
-		const {
-			isCollectionFetching,
-			isCollectionsLoaded,
-			collections,
-			errorMessage,
-			history
-		} = this.props;
+	}, [fetchCollectionsStart]);
 
-		if (errorMessage) {
-			alert(errorMessage);
-			history.push('/');
-		}
-
-		return !isCollectionFetching && isCollectionsLoaded ? (
-			<div className={styles.collectionsOverview}>
-				{collections.map(({ id, ...otherCollectionProps }) => (
-					<CollectionPreview key={id} {...otherCollectionProps} />
-				))}
-			</div>
-		) : (
-			<Spinner />
-		);
+	if (errorMessage) {
+		alert(errorMessage);
+		history.push('/');
 	}
-}
+
+	return !isCollectionFetching && isCollectionsLoaded ? (
+		<div className={styles.collectionsOverview}>
+			{collections.map(({ id, ...otherCollectionProps }) => (
+				<CollectionPreview key={id} {...otherCollectionProps} />
+			))}
+		</div>
+	) : (
+		<Spinner />
+	);
+};
 
 const mapStateToProps = createStructuredSelector({
 	isCollectionFetching: selectIsCollectionFetching,
