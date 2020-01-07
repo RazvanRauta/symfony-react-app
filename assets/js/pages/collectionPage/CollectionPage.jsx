@@ -31,13 +31,18 @@ class CollectionPage extends Component {
 			},
 			fetchCollectionByIdStart,
 			token,
-			isTokenLoaded
+			isTokenLoaded,
+			history
 		} = this.props;
 
 		if (isTokenLoaded && token) {
 			fetchCollectionByIdStart(token, collectionId);
 		} else {
-			this.props.history.push('/signIn');
+			if (history.action !== 'POP') {
+				history.push('/signIn');
+			} else {
+				history.push('/');
+			}
 		}
 	}
 

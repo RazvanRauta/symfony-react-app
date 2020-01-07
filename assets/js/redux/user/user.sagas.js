@@ -4,7 +4,7 @@
  * 17:40
  */
 
-import { takeLatest, call, put } from 'redux-saga/effects';
+import { all, takeLatest, call, put } from 'redux-saga/effects';
 import UserActionType from './user.types';
 import {
 	emailSignInFailure,
@@ -91,4 +91,13 @@ export function* registerUser(action) {
 
 export function* onUserRegistration() {
 	yield takeLatest(UserActionType.REGISTER_USER_START, registerUser);
+}
+
+export function* userSagas() {
+	yield all([
+		call(onGoogleSignInStart),
+		call(onFetchingUser),
+		call(onEmailSignInStart),
+		call(onUserRegistration)
+	]);
 }

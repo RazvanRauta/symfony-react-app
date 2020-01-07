@@ -25,11 +25,15 @@ import {
 
 class CollectionsOverview extends React.Component {
 	componentDidMount() {
-		const { fetchCollectionsStart, token, isTokenLoaded } = this.props;
+		const { fetchCollectionsStart, token, isTokenLoaded, history } = this.props;
 		if (isTokenLoaded && token) {
 			fetchCollectionsStart(token);
 		} else {
-			this.props.history.push('/signIn');
+			if (history.action !== 'POP') {
+				history.push('/signIn');
+			} else {
+				history.push('/');
+			}
 		}
 	}
 	render() {
