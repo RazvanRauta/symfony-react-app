@@ -4,7 +4,7 @@
  * Time: 23:00
  */
 
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import styles from './SignIn.scss';
@@ -24,30 +24,17 @@ import {
 	selectUserErrorMessage
 } from '../../redux/user/user.selector';
 
-class SignIn extends Component {
-	constructor(props) {
-		super(props);
+const SignIn = props => {
+	const [userCredentials, setCredentials] = useState({
+		email: '',
+		password: ''
+	});
 
-		this.state = {
-			email: '',
-			password: ''
-		};
-	}
-
-	handleSubmit = async event => {
+	const handleSubmit = async event => {
 		event.preventDefault();
-		const {
-			emailSignInStart,
-			isUserLoaded,
-			history,
-			errorMessage
-		} = this.props;
-		const userInfo = {
-			email: event.target.email.value,
-			password: event.target.password.value
-		};
+		const { emailSignInStart, isUserLoaded, history, errorMessage } = props;
 
-		emailSignInStart(userInfo);
+		emailSignInStart(userCredentials);
 
 		switch (true) {
 			case typeof errorMessage !== 'undefined':
@@ -62,18 +49,18 @@ class SignIn extends Component {
 		}
 	};
 
-	handleChange = event => {
+	const handleChange = event => {
 		const { value, name } = event.target;
-		this.setState({ [name]: value });
+		setCredentials({ ...userCredentials, [name]: value });
 	};
 
-	handleLoginFromGoogle = ({ email, givenName, familyName, imageUrl }) => {
-		const {
-			isUserLoaded,
-			googleSignInStart,
-			history,
-			errorMessage
-		} = this.props;
+	const handleLoginFromGoogle = ({
+		email,
+		givenName,
+		familyName,
+		imageUrl
+	}) => {
+		const { isUserLoaded, googleSignInStart, history, errorMessage } = props;
 		const userInfo = {
 			email,
 			firstName: givenName,
@@ -96,58 +83,56 @@ class SignIn extends Component {
 		}
 	};
 
-	responseGoogle = response => {
+	const responseGoogle = response => {
 		if (typeof response !== 'undefined' && response.profileObj) {
 			const userObject = response.profileObj;
-			this.handleLoginFromGoogle(userObject);
+			handleLoginFromGoogle(userObject);
 		}
 	};
 
-	render() {
-		return (
-			<div className={styles.signIn}>
-				<h2>I already have an account</h2>
-				<span>Sign in with your email and password</span>
-				<form onSubmit={this.handleSubmit}>
-					<FormInput
-						name="email"
-						type="email"
-						value={this.state.email}
-						handleChange={this.handleChange}
-						required
-						label={'Email'}
+	return (
+		<div className={styles.signIn}>
+			<h2>I already have an account</h2>
+			<span>Sign in with your email and password</span>
+			<form onSubmit={handleSubmit}>
+				<FormInput
+					name="email"
+					type="email"
+					value={userCredentials.email}
+					handleChange={handleChange}
+					required
+					label={'Email'}
+				/>
+				<FormInput
+					name="password"
+					type={'password'}
+					value={userCredentials.password}
+					handleChange={handleChange}
+					required
+					label={'Password'}
+				/>
+				<div className={styles.buttons}>
+					<CustomButton type={'submit'}>Sign In</CustomButton>
+					<GoogleLogin
+						clientId={googleClient}
+						render={renderProps => (
+							<CustomButton
+								isGoogleSigIn
+								onClick={renderProps.onClick}
+								disabled={renderProps.disabled}
+							>
+								Google Sign In
+							</CustomButton>
+						)}
+						onSuccess={responseGoogle}
+						onFailure={responseGoogle}
+						cookiePolicy={'single_host_origin'}
 					/>
-					<FormInput
-						name="password"
-						type={'password'}
-						value={this.state.password}
-						handleChange={this.handleChange}
-						required
-						label={'Password'}
-					/>
-					<div className={styles.buttons}>
-						<CustomButton type={'submit'}>Sign In</CustomButton>
-						<GoogleLogin
-							clientId={googleClient}
-							render={renderProps => (
-								<CustomButton
-									isGoogleSigIn
-									onClick={renderProps.onClick}
-									disabled={renderProps.disabled}
-								>
-									Google Sign In
-								</CustomButton>
-							)}
-							onSuccess={this.responseGoogle}
-							onFailure={this.responseGoogle}
-							cookiePolicy={'single_host_origin'}
-						/>
-					</div>
-				</form>
-			</div>
-		);
-	}
-}
+				</div>
+			</form>
+		</div>
+	);
+};
 
 const mapStateToProps = createStructuredSelector({
 	isTokenLoaded: selectIsTokenLoaded,

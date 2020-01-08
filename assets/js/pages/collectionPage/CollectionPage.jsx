@@ -4,7 +4,7 @@
  * Time: 15:01
  */
 
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import styles from './CollectionPage.scss';
 import { connect } from 'react-redux';
 import { fetchCollectionByIdStart } from '../../redux/shop/shop.actions';
@@ -23,54 +23,53 @@ import {
 	selectIsTokenLoaded
 } from '../../redux/user/user.selector';
 
-class CollectionPage extends Component {
-	componentDidMount() {
-		const {
-			match: {
-				params: { collectionId }
-			},
-			fetchCollectionByIdStart,
-			token,
-			isTokenLoaded
-		} = this.props;
-
+const CollectionPage = ({
+	match: {
+		params: { collectionId }
+	},
+	fetchCollectionByIdStart,
+	token,
+	isTokenLoaded,
+	history,
+	isCollectionFetching,
+	isCollectionLoaded,
+	collection,
+	errorMessage
+}) => {
+	useEffect(() => {
 		if (isTokenLoaded && token) {
 			fetchCollectionByIdStart(token, collectionId);
 		} else {
-			this.props.history.push('/signIn');
+			if (history.action !== 'POP') {
+				history.push('/signIn');
+			} else {
+				history.push('/');
+			}
 		}
-	}
+	}, [fetchCollectionByIdStart]);
 
-	render() {
-		const {
-			isCollectionFetching,
-			isCollectionLoaded,
-			collection,
-			errorMessage,
-			history
-		} = this.props;
-		let collectionObj;
-		if (errorMessage) {
-			alert(errorMessage);
-			history.push('/');
-		}
-		if (isCollectionLoaded) {
-			collectionObj = collection[0];
-		}
-		return !isCollectionFetching && isCollectionLoaded ? (
-			<div className={styles.collectionPage}>
-				<h2 className={styles.title}>{collectionObj.title}</h2>
-				<div className={styles.items}>
-					{collectionObj.products.map(item => (
-						<CollectionItem key={item.id} item={item} />
-					))}
-				</div>
-			</div>
-		) : (
-			<Spinner />
-		);
+	let collectionObj;
+	if (errorMessage) {
+		alert(errorMessage);
+		history.push('/');
 	}
-}
+	if (isCollectionLoaded) {
+		collectionObj = collection[0];
+	}
+	return !isCollectionFetching && isCollectionLoaded ? (
+		<div className={styles.collectionPage}>
+			<h2 className={styles.title}>{collectionObj.title}</h2>
+			<div className={styles.items}>
+				{collectionObj.products.map(item => (
+					<CollectionItem key={item.id} item={item} />
+				))}
+			</div>
+		</div>
+	) : (
+		<Spinner />
+	);
+};
+
 const mapStateToProps = createStructuredSelector({
 	isCollectionFetching: selectIsCollectionFetching,
 	isCollectionLoaded: selectIsCollectionLoaded,

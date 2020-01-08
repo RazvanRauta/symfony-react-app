@@ -3,7 +3,7 @@
  * 05.01.2020
  * 13:57
  */
-import { takeLatest, call, put } from 'redux-saga/effects';
+import { all, takeLatest, call, put } from 'redux-saga/effects';
 
 import ShopActionTypes from './shop.types';
 import {
@@ -54,4 +54,8 @@ export function* fetchCollectionByIdStart() {
 		ShopActionTypes.FETCH_COLLECTION_BY_ID_START,
 		fetchCollectionByIdAsync
 	);
+}
+
+export function* shopSagas() {
+	yield all([call(fetchCollectionsStart), call(fetchCollectionByIdStart)]);
 }
