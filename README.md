@@ -6,7 +6,7 @@ E-commerce app, made with Symfony, React, Redux and Redux Saga where React is ru
 
 ## Live view
 
-#### [https://rr-clothing.rrazvan.dev](https://rr-clothing.rrazvan.dev)
+#### [https://rr-clothing.herokuapp.com](https://rr-clothing.herokuapp.com)
 
 <p align="center">
   <img src="gitPics/screen.png" width="860" height="430"/>
